@@ -17,8 +17,6 @@ Obtain the following keys in the Twitter Developer console and add them to your 
 
 # Contribution 
 Want to contribute?  
-Feel free to put in a Pull Request! 
-
-Join [Discord]() 
+Feel free to put in a Pull Request!
 
 # License

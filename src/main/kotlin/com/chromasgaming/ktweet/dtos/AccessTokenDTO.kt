@@ -1,4 +1,4 @@
-package com.chromasgaming.ktweet.dto
+package com.chromasgaming.ktweet.dtos
 
 import kotlinx.serialization.Serializable
 

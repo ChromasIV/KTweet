@@ -1,45 +1,32 @@
 package com.chromasgaming.ktweet.oauth
 
+import com.chromasgaming.ktweet.config.ClientConfig
 import com.chromasgaming.ktweet.constants.BASEURL
-import com.chromasgaming.ktweet.dto.AccessTokenDTO
-import com.chromasgaming.ktweet.dto.RequestTokenDTO
-import io.ktor.client.*
+import com.chromasgaming.ktweet.dtos.AccessTokenDTO
+import com.chromasgaming.ktweet.dtos.RequestTokenDTO
 import io.ktor.client.call.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 
 class TwitterAuthentication {
-
-    private val client = HttpClient(CIO) {
-        install(JsonFeature) {
-            serializer = KotlinxSerializer(json = kotlinx.serialization.json.Json {
-                isLenient = true
-                ignoreUnknownKeys = true
-            })
-        }
-    }
-
     private var signatureBuilder = SignatureBuilder()
 
     suspend fun getRequestToken(consumerKey: String, consumerSecret: String): RequestTokenDTO {
+        val client = ClientConfig()
+        val builder = HttpRequestBuilder()
 
         val authorizationHeaderString =
             signatureBuilder.buildSignature(
                 "POST",
                 consumerKey, consumerSecret, null, null,
-                "/oauth/request_token", "oauth/request_token"
+                "oauth/request_token"
             )
 
+        builder.url("$BASEURL/oauth/request_token")
+        builder.headers.append(HttpHeaders.Authorization, authorizationHeaderString)
 
-        val response: HttpResponse = client.post("$BASEURL/oauth/request_token") {
-            headers {
-                append(HttpHeaders.Authorization, authorizationHeaderString)
-            }
-        }
+        val response: HttpResponse = client.post(builder)
 
         val stringBody: String = response.receive()
         client.close()
@@ -56,45 +43,43 @@ class TwitterAuthentication {
         )
     }
 
-    fun getVerifier() {
-        //println("CLICK: ${BASEURL}/oauth/authorize?oauth_token=${getRequestToken().requestToken}")
-    }
-
     suspend fun getAccessToken(
         consumerKey: String,
         consumerSecret: String,
         authToken: String,
         authVerifier: String
     ): AccessTokenDTO {
+        val client = ClientConfig()
+        val builder = HttpRequestBuilder()
+
         val authorizationHeaderString = signatureBuilder.buildSignature(
             "POST",
             consumerKey,
             consumerSecret,
             null,
             null,
-            "/oauth/access_token?oauth_token=",
-            ""
+            "/oauth/access_token?oauth_token="
         )
 
-        val response: HttpResponse =
-            client.post("$BASEURL/oauth/access_token?oauth_token=$authToken&oauth_verifier=$authVerifier") {
-                headers {
-                    append(HttpHeaders.Authorization, authorizationHeaderString)
-                }
-            }
+        builder.url("$BASEURL/oauth/access_token?oauth_token=$authToken&oauth_verifier=$authVerifier")
+        builder.headers.append(HttpHeaders.Authorization, authorizationHeaderString)
+
+        val response: HttpResponse = client.post(builder)
 
         val stringBody: String = response.receive()
-        val authToken = stringBody.substring(
+        val authTokenString = stringBody.substring(
             stringBody.indexOf("oauth_token=") + 12,
             stringBody.indexOf("&oauth_token_secret=")
         )
-        val authSecret =
-            stringBody.substring(stringBody.indexOf("&oauth_token_secret=") + 20, stringBody.indexOf("&user_id"))
+        val authSecret = stringBody.substring(
+            stringBody.indexOf("&oauth_token_secret=") + 20,
+            stringBody.indexOf("&user_id")
+        )
         val userId = stringBody.substring(stringBody.indexOf("&user_id=") + 9, stringBody.indexOf("&screen_name"))
         val userName = stringBody.substring(stringBody.indexOf("&screen_name=") + 13)
         client.close()
 
-        return AccessTokenDTO(authToken, authSecret, userId, userName)
+        return AccessTokenDTO(authTokenString, authSecret, userId, userName)
     }
 }
 

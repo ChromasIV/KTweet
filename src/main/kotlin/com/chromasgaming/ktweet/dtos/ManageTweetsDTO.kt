@@ -1,11 +1,11 @@
-package com.chromasgaming.ktweet.dto
+package com.chromasgaming.ktweet.dtos
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PostTweetDTO(val data: PostTweetMetaDTO) {
+data class ManageTweetsDTO(val data: Response) {
     @Serializable
-    data class PostTweetMetaDTO(val id: String, val text: String)
+    data class Response(val id: String? = null, val text: String? = null, val deleted: Boolean? = null)
 }
 
 @Serializable

@@ -2,7 +2,6 @@ package com.chromasgaming.ktweet.oauth
 
 import com.chromasgaming.ktweet.constants.BASEURL
 import io.ktor.http.auth.*
-import java.lang.StringBuilder
 import java.net.URLEncoder
 import java.util.*
 import javax.crypto.Mac
@@ -16,7 +15,6 @@ internal class SignatureBuilder {
         oauthConsumerSecret: String,
         accessToken: String?,
         accessTokenSecret: String?,
-        callBackUrl: String,
         path: String
     ): String {
 
@@ -24,7 +22,6 @@ internal class SignatureBuilder {
         val oauthSignatureMethod = "HMAC-SHA1"
         val oauthTimestamp = (System.currentTimeMillis() / 1000).toString()
         val oauthVersion = "1.0"
-        val oauthCallbackValue = callBackUrl
 
         val additionalParameters = StringBuilder()
 

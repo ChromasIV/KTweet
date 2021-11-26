@@ -3,22 +3,24 @@ package com.chromasgaming.ktweet.tweets
 import com.chromasgaming.ktweet.config.ClientConfig
 import com.chromasgaming.ktweet.constants.BASEURL
 import com.chromasgaming.ktweet.constants.VERSION
-import com.chromasgaming.ktweet.dto.PostTweetDTO
-import com.chromasgaming.ktweet.dto.Tweet
+import com.chromasgaming.ktweet.dtos.ManageTweetsDTO
+import com.chromasgaming.ktweet.dtos.Tweet
 import com.chromasgaming.ktweet.oauth.SignatureBuilder
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 
+@ExperimentalSerializationApi
 class ManageTweets {
     private val json = Json { encodeDefaults = false }
 
-    suspend fun create(tweet: Tweet): PostTweetDTO {
+    suspend fun create(tweet: Tweet): ManageTweetsDTO {
 
         val authorizationHeaderString = SignatureBuilder().buildSignature(
             "POST",
@@ -26,10 +28,9 @@ class ManageTweets {
             System.getenv("consumerSecret"),
             System.getenv("accessToken"),
             System.getenv("accessTokenSecret"),
-            "",
             "$VERSION/tweets"
         )
-        val stringBody: PostTweetDTO
+        val stringBody: ManageTweetsDTO
         runBlocking {
             val client = ClientConfig()
             val builder = HttpRequestBuilder()
@@ -41,22 +42,21 @@ class ManageTweets {
 
             val response = client.post(builder)
             stringBody = response.receive()
-            println(stringBody)
             client.close()
         }
         return stringBody
     }
 
-    suspend fun destroy(id: String) {
+    suspend fun destroy(id: String): ManageTweetsDTO {
         val authorizationHeaderString = SignatureBuilder().buildSignature(
             "DELETE",
             System.getenv("consumerKey"),
             System.getenv("consumerSecret"),
             System.getenv("accessToken"),
             System.getenv("accessTokenSecret"),
-            "",
             "$VERSION/tweets/$id"
         )
+        val stringBody: ManageTweetsDTO
         runBlocking {
             val client = ClientConfig()
             val builder = HttpRequestBuilder()
@@ -64,10 +64,9 @@ class ManageTweets {
             builder.headers.append(HttpHeaders.Authorization, authorizationHeaderString)
 
             val response = client.delete(builder)
-            val stringBody: String = response.receive()
-            println(stringBody)
-
+            stringBody = response.receive()
             client.close()
         }
+        return stringBody
     }
 }
