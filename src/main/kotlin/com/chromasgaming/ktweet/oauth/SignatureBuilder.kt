@@ -7,6 +7,10 @@ import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
+/**
+ * This class handles building the Authentication signature needed for OAuth 1.0a User context.
+ * Reference [Authentication](https://developer.twitter.com/en/docs/authentication/oauth-1-0a/creating-a-signature)
+ */
 internal class SignatureBuilder {
 
     fun buildSignature(

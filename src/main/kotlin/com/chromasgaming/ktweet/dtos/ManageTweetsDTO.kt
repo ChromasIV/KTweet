@@ -9,7 +9,7 @@ data class ManageTweetsDTO(val data: Response) {
 }
 
 @Serializable
-data class Tweet(val text: String, val media: Media? = null) {
+data class TweetDTO(val text: String, val media: Media? = null) {
     @Serializable
     data class Media(val media_ids: List<String>? = null, val tagged_user_ids: List<String>? = null)
 }
