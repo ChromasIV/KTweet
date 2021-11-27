@@ -1,7 +1,7 @@
 # KTweet - A Kotlin Twitter Library
 KTweet is a library that allows you to use the Twitter API v2.
 
-Interested in Kotlin or KTweet? Join [Discord]()
+Interested in Kotlin or KTweet? Join [Discord](https://discord.gg/aSBXXkzb3f)
 
 ## Setup
 1. Obtain the API keys from your Twitter Developer portal. Follow this [guide](https://developer.twitter.com/en/docs/twitter-api/getting-started/getting-access-to-the-twitter-api).
