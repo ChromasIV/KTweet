@@ -6,7 +6,7 @@ plugins {
     id("org.jetbrains.dokka") version "1.6.0"
 }
 
-group = "me.flipm"
+group = "com.chromasgaming"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -23,8 +23,6 @@ dependencies {
     implementation("io.ktor:ktor-client-serialization:1.6.2")
     implementation("io.ktor:ktor-client-auth:1.6.2")
     implementation("io.ktor:ktor-client-logging:1.6.2")
-
-
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.1")
 
 }
@@ -34,6 +32,7 @@ tasks.test {
     testLogging {
         events("passed", "skipped", "failed")
     }
+    onlyIf { !project.hasProperty("skipTests")}
 }
 
 tasks.withType<KotlinCompile> {
