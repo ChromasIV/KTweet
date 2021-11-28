@@ -28,7 +28,9 @@ dependencies {
 
 publishing {
     publications {
-        create<MavenPublication>("KTweet") {
+        create<MavenPublication>("ktweet") {
+            groupId = "com.chromasgaming"
+            artifactId = "ktweet"
             from(components["java"])
         }
     }
