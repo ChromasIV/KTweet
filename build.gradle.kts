@@ -28,7 +28,7 @@ dependencies {
 
 publishing {
     publications {
-        create<MavenPublication>("KTweet") {
+        create<MavenPublication>("ktweet") {
             from(components["java"])
         }
     }
