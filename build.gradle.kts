@@ -27,6 +27,11 @@ dependencies {
 }
 
 publishing {
+    publications {
+        create<MavenPublication>("KTweet") {
+            from(components["java"])
+        }
+    }
     repositories {
         maven {
             name = "GitHubPackages"
