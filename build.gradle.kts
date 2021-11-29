@@ -16,14 +16,14 @@ repositories {
 }
 
 dependencies {
-    implementation("org.junit.jupiter:junit-jupiter:5.7.0")
     testImplementation(kotlin("test"))
+    
+    implementation("org.junit.jupiter:junit-jupiter:5.7.0")    
     implementation("io.ktor:ktor-client-core:1.6.2")
     implementation("io.ktor:ktor-client-cio:1.6.2")
     implementation("io.ktor:ktor-client-serialization:1.6.2")
     implementation("io.ktor:ktor-client-auth:1.6.2")
     implementation("io.ktor:ktor-client-logging:1.6.2")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.1")
 }
 
 publishing {
