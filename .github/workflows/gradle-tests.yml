@@ -29,3 +29,8 @@ jobs:
 
     - name: Build with Gradle
       run: gradle test
+      env:
+       consumerKey: ${{ secrets.CONSUMERKEY }}
+       consumerSecret: ${{ secrets.CONSUMERSECRET }}
+       accessToken: ${{ secrets.ACCESSTOKEN }}
+       accessTokenSecret: ${{ secrets.ACCESSTOKENSECRET }}
