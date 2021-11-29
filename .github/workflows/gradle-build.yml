@@ -28,4 +28,4 @@ jobs:
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
     - name: Build with Gradle
-      run: gradle build
+      run: gradle build -PskipTests
