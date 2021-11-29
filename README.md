@@ -1,4 +1,4 @@
-[![Gradle Build](https://github.com/ChromasIV/KTweet/actions/workflows/gradle-build.yml/badge.svg?branch=master)](https://github.com/ChromasIV/KTweet/actions/workflows/gradle-build.yml)
+[![Gradle Build](https://github.com/ChromasIV/KTweet/actions/workflows/gradle-build.yml/badge.svg?branch=master)](https://github.com/ChromasIV/KTweet/actions/workflows/gradle-build.yml) [![Gradle Tests](https://github.com/ChromasIV/KTweet/actions/workflows/gradle-tests.yml/badge.svg)](https://github.com/ChromasIV/KTweet/actions/workflows/gradle-tests.yml)
 # KTweet - A Kotlin Twitter Library
 KTweet is a library that allows you to use the Twitter API v2.
 
