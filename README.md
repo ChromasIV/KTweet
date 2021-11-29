@@ -11,9 +11,12 @@ Interested in Kotlin or KTweet? Join the [Discord](https://discord.gg/aSBXXkzb3f
 
 ## Contribution  
 All contribution to the library is welcomed.
-Ensure any request is properly documented.
+Ensure any request follows the following:
 
-Read [CONTRIBUTION](https://github.com/ChromasIV/KTweet/blob/ChromasIV-contributing-draft-1/CONTRIBUTING.md)
+ - [CONTRIBUTION](https://github.com/ChromasIV/KTweet/blob/ChromasIV-contributing-draft-1/CONTRIBUTING.md)
+ - [Feature Request](https://github.com/ChromasIV/KTweet/blob/master/.github/ISSUE_TEMPLATE/feature_request.md)
+ - [Bug Report](https://github.com/ChromasIV/KTweet/blob/master/.github/ISSUE_TEMPLATE/bug_report.md)
+
 
 ## License
    Copyright 2021 Thomas P. Carney
