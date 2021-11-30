@@ -25,7 +25,7 @@ jobs:
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
     - name: Import GPG Key
-      uses: crazy-max/ghaction-import-gpg@v1
+      uses: crazy-max/ghaction-import-gpg@v4
       env:
        GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
        PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
