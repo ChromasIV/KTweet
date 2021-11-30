@@ -28,7 +28,7 @@ jobs:
     - name: Build with Gradle
       run: gradle build -PskipTests
 
-    # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
+    # The USERNAME and TOKEN need to correspond to the credential's environment variables used in
     # the publishing section of your build.gradle
     - name: Publish to GitHub Packages
       run: gradle publishKtweetPublicationToGitHubPackagesRepository

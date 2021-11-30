@@ -6,6 +6,7 @@ plugins {
     id("org.jetbrains.dokka") version "1.6.0"
     id("maven-publish")
     id("signing")
+    id("io.gitlab.arturbosch.detekt") version("1.19.0")
 }
 
 group = "com.chromasgaming"
@@ -18,12 +19,12 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
     
-    implementation("org.junit.jupiter:junit-jupiter:5.7.0")    
-    implementation("io.ktor:ktor-client-core:1.6.2")
-    implementation("io.ktor:ktor-client-cio:1.6.2")
-    implementation("io.ktor:ktor-client-serialization:1.6.2")
-    implementation("io.ktor:ktor-client-auth:1.6.2")
-    implementation("io.ktor:ktor-client-logging:1.6.2")
+    implementation("org.junit.jupiter:junit-jupiter:5.8.1")
+    implementation("io.ktor:ktor-client-core:1.6.4")
+    implementation("io.ktor:ktor-client-cio:1.6.4")
+    implementation("io.ktor:ktor-client-serialization:1.6.4")
+    implementation("io.ktor:ktor-client-auth:1.6.4")
+    implementation("io.ktor:ktor-client-logging:1.6.4")
 }
 
 publishing {
@@ -45,6 +46,10 @@ publishing {
             }
         }
     }
+}
+
+detekt {
+    config = files("config/detekt/detekt-config.yml")
 }
 
 tasks.test {

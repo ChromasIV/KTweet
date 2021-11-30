@@ -1,12 +1,16 @@
 package com.chromasgaming.ktweet.config
 
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
-import io.ktor.client.features.logging.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.features.json.JsonFeature
+import io.ktor.client.features.json.serializer.KotlinxSerializer
+import io.ktor.client.features.logging.Logging
+import io.ktor.client.features.logging.Logger
+import io.ktor.client.features.logging.DEFAULT
+import io.ktor.client.request.post
+import io.ktor.client.request.delete
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.statement.HttpResponse
 
 class ClientConfig {
 

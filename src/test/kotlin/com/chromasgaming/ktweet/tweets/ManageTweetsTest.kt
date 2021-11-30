@@ -29,6 +29,7 @@ internal class ManageTweetsTest {
     fun createMediaTweet(): Unit = runBlocking {
         val tweetDTO = TweetDTO("Tweeting with media!", TweetDTO.Media(listOf("1449722748268425225")))
         post = manageTweets.create(tweetDTO)
+        println(post)
         manageTweets.destroy(post.data.id!!)
     }
 
@@ -52,6 +53,4 @@ internal class ManageTweetsTest {
         post = manageTweets.create(tweetDTO)
         manageTweets.destroy(post.data.id!!)
     }
-
-
 }

@@ -1,9 +1,11 @@
 package com.chromasgaming.ktweet.oauth
 
 import com.chromasgaming.ktweet.constants.BASEURL
-import io.ktor.http.auth.*
+import com.chromasgaming.ktweet.constants.MILLISECONDS
+import io.ktor.http.auth.HttpAuthHeader
 import java.net.URLEncoder
-import java.util.*
+import java.util.UUID
+import java.util.Base64
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
@@ -24,7 +26,7 @@ internal class SignatureBuilder {
 
         val oauthNonce = UUID.randomUUID().toString().replace("-", "")
         val oauthSignatureMethod = "HMAC-SHA1"
-        val oauthTimestamp = (System.currentTimeMillis() / 1000).toString()
+        val oauthTimestamp = (System.currentTimeMillis() / MILLISECONDS).toString()
         val oauthVersion = "1.0"
 
         val additionalParameters = StringBuilder()

@@ -6,9 +6,10 @@ import com.chromasgaming.ktweet.constants.VERSION
 import com.chromasgaming.ktweet.dtos.ManageTweetsDTO
 import com.chromasgaming.ktweet.dtos.TweetDTO
 import com.chromasgaming.ktweet.oauth.SignatureBuilder
-import io.ktor.client.call.*
-import io.ktor.client.request.*
-import io.ktor.http.*
+import io.ktor.client.call.receive
+import io.ktor.client.request.url
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.http.HttpHeaders
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
