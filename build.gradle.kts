@@ -37,14 +37,14 @@ publishing {
         }
     }
     repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/ChromasIV/KTweet")
-            credentials {
-                username = System.getenv("USERNAME")
-                password = System.getenv("TOKEN")
-            }
-        }
+//        maven {
+//            name = "GitHubPackages"
+//            url = uri("https://maven.pkg.github.com/ChromasIV/KTweet")
+//            credentials {
+//                username = System.getenv("USERNAME")
+//                password = System.getenv("TOKEN")
+//            }
+//        }
         maven {
             name = "OSSRH"
             url = uri("https://s01.oss.sonatype.org")
