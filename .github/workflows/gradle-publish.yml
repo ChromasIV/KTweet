@@ -28,7 +28,7 @@ jobs:
       uses: crazy-max/ghaction-import-gpg@v4
       with:
        GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-       PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+       PASSPHRASE: ${{ secrets.PASSPHRASE }}
        git_user_signingkey: true       
     - name: Publish package
       run: gradle publish
