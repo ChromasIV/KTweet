@@ -24,6 +24,11 @@ jobs:
         distribution: 'adopt'
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
+    - name: Import GPG Key
+      uses: crazy-max/ghaction-import-gpg@v1
+      env:
+       GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+       PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
     # The USERNAME and TOKEN need to correspond to the credential's environment variables used in
     # the publishing section of your build.gradle
 #     - name: Publish to GitHub Packages
