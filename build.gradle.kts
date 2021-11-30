@@ -45,6 +45,15 @@ publishing {
                 password = System.getenv("TOKEN")
             }
         }
+        maven {
+            name = "OSSRH"
+            url = uri("https://s01.oss.sonatype.org")
+            credentials {
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
+            }
+
+        }
     }
 }
 
