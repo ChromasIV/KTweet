@@ -26,18 +26,10 @@ jobs:
         settings-path: ${{ github.workspace }} # location for the settings.xml file
     - name: Import GPG Key
       uses: crazy-max/ghaction-import-gpg@v4
-      env:
+      with:
        GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
        PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-    # The USERNAME and TOKEN need to correspond to the credential's environment variables used in
-    # the publishing section of your build.gradle
-#     - name: Publish to GitHub Packages
-#       run: gradle publishKtweetPublicationToGitHubPackagesRepository
-#       env:
-#         USERNAME: ${{ github.actor }}
-#         TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#     - name: Validate Gradle wrapper
-#       uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+       git_user_signingkey: true       
     - name: Publish package
       run: gradle publish
       env:
