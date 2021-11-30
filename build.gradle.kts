@@ -12,6 +12,14 @@ plugins {
 group = "com.chromasgaming"
 version = "0.0.2"
 
+val dokkaHtml by tasks.getting(org.jetbrains.dokka.gradle.DokkaTask::class)
+
+val javadocJar: TaskProvider<Jar> by tasks.registering(Jar::class) {
+    dependsOn(dokkaHtml)
+    archiveClassifier.set("javadoc")
+    from(dokkaHtml.outputDirectory)
+}
+
 repositories {
     mavenCentral()
 }
@@ -27,13 +35,39 @@ dependencies {
     implementation("io.ktor:ktor-client-logging:1.6.4")
 }
 
+java {
+    withSourcesJar()
+}
+
 publishing {
     publications {
         create<MavenPublication>("ktweet") {
             groupId = "com.chromasgaming"
             artifactId = "ktweet"
-
+            artifact(javadocJar)
             from(components["java"])
+
+            pom {
+                name.set("KTweet")
+                description.set("KTweet is a Kotlin Library that allows you to consume the Twitter API v2.")
+                url.set("https://github.com/ChromasIV/KTweet")
+                licenses {
+                    license {
+                        name.set("The Apache License, Version 2.0")
+                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("ChromasIV")
+                        name.set("Thomas Carney")
+                        email.set("chromasiv@gmail.com")
+                    }
+                }
+                scm {
+                    url.set("https://github.com/ChromasIV/KTweet")
+                }
+            }
         }
     }
     repositories {
@@ -56,6 +90,12 @@ publishing {
         }
     }
 }
+
+signing {
+    sign(publishing.publications)
+}
+
+tasks.kotlinSourcesJar() {}
 
 detekt {
     config = files("config/detekt/detekt-config.yml")
