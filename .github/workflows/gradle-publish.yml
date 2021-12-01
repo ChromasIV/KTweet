@@ -24,14 +24,19 @@ jobs:
         distribution: 'adopt'
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
-
-    - name: Build with Gradle
-      run: gradle build -PskipTests
-
     # The USERNAME and TOKEN need to correspond to the credential's environment variables used in
     # the publishing section of your build.gradle
-    - name: Publish to GitHub Packages
-      run: gradle publishKtweetPublicationToGitHubPackagesRepository
+#     - name: Publish to GitHub Packages
+#       run: gradle publishKtweetPublicationToGitHubPackagesRepository
+#       env:
+#         USERNAME: ${{ github.actor }}
+#         TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#     - name: Validate Gradle wrapper
+#       uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+    - name: Publish package
+      run: gradle publish
       env:
-        USERNAME: ${{ github.actor }}
-        TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+        MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+        ORG_GRADLE_PROJECT_signingKey: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEY }}
+        ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
