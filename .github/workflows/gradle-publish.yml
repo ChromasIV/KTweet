@@ -3,9 +3,7 @@
 
 name: Gradle Package
 
-on:
-  release:
-    types: [created]
+on: push
 
 jobs:
   build:
@@ -26,10 +24,10 @@ jobs:
         settings-path: ${{ github.workspace }} # location for the settings.xml file
     - name: Import GPG Key
       uses: crazy-max/ghaction-import-gpg@v4
-      with:
+      env:
        GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
        PASSPHRASE: ${{ secrets.PASSPHRASE }}
-       git_user_signingkey: true       
+#        git_user_signingkey: true       
     - name: Publish package
       run: gradle publish
       env:
