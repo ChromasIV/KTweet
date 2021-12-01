@@ -3,7 +3,9 @@
 
 name: Gradle Package
 
-on: push
+on:
+  release:
+    types: [created]
 
 jobs:
   build:
@@ -20,15 +22,19 @@ jobs:
       with:
         java-version: '8'
         distribution: 'adopt'
-        server-id: ossrh
-        server-username: MAVEN_USERNAME
-        server-password: MAVEN_PASSWORD
-        gpg-private-key: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEY }}
-        gpg-passphrase: MAVEN_GPG_PASSPHRASE    
-        
+        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+        settings-path: ${{ github.workspace }} # location for the settings.xml file
+    # The USERNAME and TOKEN need to correspond to the credential's environment variables used in
+    # the publishing section of your build.gradle
+#     - name: Publish to GitHub Packages
+#       run: gradle publishKtweetPublicationToGitHubPackagesRepository
+#       env:
+#         USERNAME: ${{ github.actor }}
+#         TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#     - name: Validate Gradle wrapper
+#       uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
     - name: Publish package
       run: gradle publish
       env:
         MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-        MAVEN_GPG_PASSPHRASE: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
