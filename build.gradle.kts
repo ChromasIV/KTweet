@@ -94,7 +94,7 @@ publishing {
 signing {
     val signingKey: String? by project
     val signingPassword: String? by project
-    useInMemoryPgpKeys(findProperty("signingKey") as String?, findProperty("signingPassword") as String?)
+    useInMemoryPgpKeys(signingKey, signingPassword)
     sign(publishing.publications["ktweet"])
 }
 
