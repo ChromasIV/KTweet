@@ -19,11 +19,15 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '8'
-        distribution: 'adopt'
-        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
-        settings-path: ${{ github.workspace }} # location for the settings.xml file
+        server-id: ossrh
+        server-username: MAVEN_USERNAME
+        server-password: MAVEN_PASSWORD
+        gpg-private-key: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEY }}
+        gpg-passphrase: MAVEN_GPG_PASSPHRASE    
+        
     - name: Publish package
       run: gradle publish
       env:
         MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+        MAVEN_GPG_PASSPHRASE: ${{ secrest.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
