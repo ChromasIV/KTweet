@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "com.chromasgaming"
-version = "0.0.2"
+version = "1.0.0"
 
 val dokkaHtml by tasks.getting(org.jetbrains.dokka.gradle.DokkaTask::class)
 
