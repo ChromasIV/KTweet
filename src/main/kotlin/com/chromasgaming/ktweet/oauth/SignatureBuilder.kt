@@ -4,8 +4,7 @@ import com.chromasgaming.ktweet.constants.BASEURL
 import com.chromasgaming.ktweet.constants.MILLISECONDS
 import io.ktor.http.auth.HttpAuthHeader
 import java.net.URLEncoder
-import java.util.UUID
-import java.util.Base64
+import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
@@ -21,7 +20,8 @@ internal class SignatureBuilder {
         oauthConsumerSecret: String,
         accessToken: String?,
         accessTokenSecret: String?,
-        path: String
+        path: String,
+        paramMap: Map<String, String>
     ): String {
 
         val oauthNonce = UUID.randomUUID().toString().replace("-", "")
@@ -36,6 +36,19 @@ internal class SignatureBuilder {
         } else {
             additionalParameters.append(HttpAuthHeader.Parameters.OAuthToken + "=$accessToken&")
             additionalParameters.append(HttpAuthHeader.Parameters.OAuthVersion + "=$oauthVersion")
+        }
+        //TODO: Find a better solution for checking index against size
+        if (paramMap.isNotEmpty()) {
+            additionalParameters.append("&")
+            var count = 1
+            paramMap.forEach { (key, value) ->
+                additionalParameters.append("$key=$value")
+                if (paramMap.size > 1 && paramMap.size != count) {
+                    additionalParameters.append("&")
+                    count += 1
+                }
+            }
+
         }
 
         val oauthBuilder =

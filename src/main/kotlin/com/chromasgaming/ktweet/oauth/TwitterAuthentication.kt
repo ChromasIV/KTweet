@@ -2,12 +2,11 @@ package com.chromasgaming.ktweet.oauth
 
 import com.chromasgaming.ktweet.config.ClientConfig
 import com.chromasgaming.ktweet.constants.BASEURL
-import com.chromasgaming.ktweet.constants.TWELVE
+import com.chromasgaming.ktweet.constants.NINE
 import com.chromasgaming.ktweet.constants.THIRTEEN
+import com.chromasgaming.ktweet.constants.TWELVE
 import com.chromasgaming.ktweet.constants.TWENTY
 import com.chromasgaming.ktweet.constants.TWENTYSIX
-import com.chromasgaming.ktweet.constants.NINE
-
 import com.chromasgaming.ktweet.dtos.AccessTokenDTO
 import com.chromasgaming.ktweet.dtos.RequestTokenDTO
 import io.ktor.client.call.receive
@@ -27,7 +26,8 @@ class TwitterAuthentication {
             signatureBuilder.buildSignature(
                 "POST",
                 consumerKey, consumerSecret, null, null,
-                "oauth/request_token"
+                "oauth/request_token",
+                emptyMap()
             )
 
         builder.url("$BASEURL/oauth/request_token")
@@ -65,7 +65,8 @@ class TwitterAuthentication {
             consumerSecret,
             null,
             null,
-            "/oauth/access_token?oauth_token="
+            "/oauth/access_token?oauth_token=",
+            emptyMap()
         )
 
         builder.url("$BASEURL/oauth/access_token?oauth_token=$authToken&oauth_verifier=$authVerifier")
