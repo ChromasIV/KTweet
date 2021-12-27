@@ -19,7 +19,7 @@ internal class SearchTweetsTest {
     @Test
     fun searchTweets(): Unit = runBlocking {
         val paramMap = LinkedHashMap<String, String>()
-        paramMap["query"] = "from:chromasiv -is:retweet has:media"
+        paramMap["query"] = "from:chromasiv has:media"
         paramMap["tweet.fields"] =
             "created_at,attachments"
         val tweetObject = searchTweets.search(paramMap)
