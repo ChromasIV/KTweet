@@ -19,7 +19,10 @@ import java.net.URLEncoder
 
 class SearchTweets {
 
-    private val json = Json { encodeDefaults = false }
+    private val json = Json {
+        encodeDefaults = false
+        ignoreUnknownKeys = true
+    }
 
     suspend fun search(paramMap: LinkedHashMap<String, String>): List<TweetObject> {
         paramMap.forEach { (key, value) ->
@@ -50,7 +53,9 @@ class SearchTweets {
             builder.headers.append(HttpHeaders.ContentType, "application/json")
 
             val response = client.get(builder)
-            stringBody = json.decodeFromString<JsonObject>(response.receive())["data"] as List<TweetObject>
+            var stringBody2 = json.decodeFromString<JsonObject>(response.receive())["data"]
+
+            stringBody = json.decodeFromString(stringBody2.toString())
             client.close()
         }
 
