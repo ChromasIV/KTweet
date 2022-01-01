@@ -38,7 +38,7 @@ class SearchTweets {
             "$VERSION/tweets/search/recent",
             paramMap
         )
-        val stringBody: List<TweetObject>
+        val listTweetObject: List<TweetObject>
         runBlocking {
             val client = ClientConfig()
             val builder = HttpRequestBuilder()
@@ -53,12 +53,12 @@ class SearchTweets {
             builder.headers.append(HttpHeaders.ContentType, "application/json")
 
             val response = client.get(builder)
-            var stringBody2 = json.decodeFromString<JsonObject>(response.receive())["data"]
+            var jsonString = json.decodeFromString<JsonObject>(response.receive())["data"]
 
-            stringBody = json.decodeFromString(stringBody2.toString())
+            listTweetObject = json.decodeFromString(jsonString.toString())
             client.close()
         }
 
-        return stringBody
+        return listTweetObject
     }
 }
