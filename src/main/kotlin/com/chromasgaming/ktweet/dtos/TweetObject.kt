@@ -41,7 +41,11 @@ data class Geo(val coordinates: Coordinates? = null, val place_id: String? = nul
 data class Coordinates(val type: String? = null, val coordinates: ArrayList<Float>? = null)
 
 @Serializable
-data class NonPublicMetrics(val impression_count: Int? = null, val url_link_clicks: Int? = null, val user_profile_clicks: Int? = null)
+data class NonPublicMetrics(
+    val impression_count: Int? = null,
+    val url_link_clicks: Int? = null,
+    val user_profile_clicks: Int? = null
+)
 
 @Serializable
 data class OrganicMetrics(
@@ -64,7 +68,12 @@ data class PromotedMetrics(
 )
 
 @Serializable
-data class PublicMetrics(val retweet_count: Int? = null, val reply_count: Int? = null, val like_count: Int? = null, val quote_count: Int? = null)
+data class PublicMetrics(
+    val retweet_count: Int? = null,
+    val reply_count: Int? = null,
+    val like_count: Int? = null,
+    val quote_count: Int? = null
+)
 
 @Serializable
 data class WithHolding(val copyright: Boolean? = null, val country_codes: ArrayList<String>? = null)

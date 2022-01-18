@@ -4,7 +4,6 @@ import com.chromasgaming.ktweet.config.ClientConfig
 import com.chromasgaming.ktweet.constants.BASEURL
 import com.chromasgaming.ktweet.constants.VERSION
 import com.chromasgaming.ktweet.dtos.TweetObject
-import com.chromasgaming.ktweet.oauth.SignatureBuilder
 import io.ktor.client.call.receive
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.url
@@ -14,7 +13,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
-import java.net.URLEncoder
 
 
 class SearchTweets {
@@ -24,20 +22,7 @@ class SearchTweets {
         ignoreUnknownKeys = true
     }
 
-    suspend fun search(paramMap: LinkedHashMap<String, String>): List<TweetObject> {
-        paramMap.forEach { (key, value) ->
-            paramMap[key] = URLEncoder.encode(value, "UTF-8").replace("+", "%20")
-        }
-
-        val authorizationHeaderString = SignatureBuilder().buildSignature(
-            "GET",
-            System.getenv("consumerKey"),
-            System.getenv("consumerSecret"),
-            System.getenv("accessToken"),
-            System.getenv("accessTokenSecret"),
-            "$VERSION/tweets/search/recent",
-            paramMap
-        )
+    suspend fun search(paramMap: LinkedHashMap<String, String>, authorizationHeaderString: String): List<TweetObject> {
         val listTweetObject: List<TweetObject>
         runBlocking {
             val client = ClientConfig()
@@ -53,7 +38,7 @@ class SearchTweets {
             builder.headers.append(HttpHeaders.ContentType, "application/json")
 
             val response = client.get(builder)
-            var jsonString = json.decodeFromString<JsonObject>(response.receive())["data"]
+            val jsonString = json.decodeFromString<JsonObject>(response.receive())["data"]
 
             listTweetObject = json.decodeFromString(jsonString.toString())
             client.close()

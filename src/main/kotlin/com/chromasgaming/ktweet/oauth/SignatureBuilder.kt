@@ -37,7 +37,7 @@ internal class SignatureBuilder {
             additionalParameters.append(HttpAuthHeader.Parameters.OAuthToken + "=$accessToken&")
             additionalParameters.append(HttpAuthHeader.Parameters.OAuthVersion + "=$oauthVersion")
         }
-        //TODO: Find a better solution for checking index against size
+
         if (paramMap.isNotEmpty()) {
             additionalParameters.append("&")
             var count = 1
