@@ -5,10 +5,9 @@ import com.chromasgaming.ktweet.constants.BASEURL
 import com.chromasgaming.ktweet.constants.VERSION
 import com.chromasgaming.ktweet.dtos.ManageTweetsDTO
 import com.chromasgaming.ktweet.dtos.TweetDTO
-import com.chromasgaming.ktweet.oauth.SignatureBuilder
 import io.ktor.client.call.receive
-import io.ktor.client.request.url
 import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.url
 import io.ktor.http.HttpHeaders
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -29,16 +28,9 @@ class ManageTweets {
      * Creates a [tweetDTO].
      * @return the response in the object [ManageTweetsDTO]
      */
-    suspend fun create(tweetDTO: TweetDTO): ManageTweetsDTO {
+    suspend fun create(tweetDTO: TweetDTO, authorizationHeaderString: String): ManageTweetsDTO {
 
-        val authorizationHeaderString = SignatureBuilder().buildSignature(
-            "POST",
-            System.getenv("consumerKey"),
-            System.getenv("consumerSecret"),
-            System.getenv("accessToken"),
-            System.getenv("accessTokenSecret"),
-            "$VERSION/tweets"
-        )
+
         val stringBody: ManageTweetsDTO
         runBlocking {
             val client = ClientConfig()
@@ -60,15 +52,8 @@ class ManageTweets {
      * Deletes a tweet by [id].
      * @return the response in the object [ManageTweetsDTO]
      */
-    suspend fun destroy(id: String): ManageTweetsDTO {
-        val authorizationHeaderString = SignatureBuilder().buildSignature(
-            "DELETE",
-            System.getenv("consumerKey"),
-            System.getenv("consumerSecret"),
-            System.getenv("accessToken"),
-            System.getenv("accessTokenSecret"),
-            "$VERSION/tweets/$id"
-        )
+    suspend fun destroy(id: String, authorizationHeaderString: String): ManageTweetsDTO {
+
         val stringBody: ManageTweetsDTO
         runBlocking {
             val client = ClientConfig()

@@ -2,12 +2,11 @@ package com.chromasgaming.ktweet.oauth
 
 import com.chromasgaming.ktweet.config.ClientConfig
 import com.chromasgaming.ktweet.constants.BASEURL
-import com.chromasgaming.ktweet.constants.TWELVE
+import com.chromasgaming.ktweet.constants.NINE
 import com.chromasgaming.ktweet.constants.THIRTEEN
+import com.chromasgaming.ktweet.constants.TWELVE
 import com.chromasgaming.ktweet.constants.TWENTY
 import com.chromasgaming.ktweet.constants.TWENTYSIX
-import com.chromasgaming.ktweet.constants.NINE
-
 import com.chromasgaming.ktweet.dtos.AccessTokenDTO
 import com.chromasgaming.ktweet.dtos.RequestTokenDTO
 import io.ktor.client.call.receive
@@ -17,17 +16,22 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpHeaders
 
 class TwitterAuthentication {
-    private var signatureBuilder = SignatureBuilder()
 
     suspend fun getRequestToken(consumerKey: String, consumerSecret: String): RequestTokenDTO {
         val client = ClientConfig()
         val builder = HttpRequestBuilder()
 
+        val signatureBuilder = SignatureBuilder.Builder()
+            .oauthConsumerKey(consumerKey)
+            .oauthConsumerSecret(consumerSecret)
+            .build()
+
         val authorizationHeaderString =
-            signatureBuilder.buildSignature(
+            buildSignature(
                 "POST",
-                consumerKey, consumerSecret, null, null,
-                "oauth/request_token"
+                signatureBuilder,
+                "oauth/request_token",
+                emptyMap()
             )
 
         builder.url("$BASEURL/oauth/request_token")
@@ -59,13 +63,16 @@ class TwitterAuthentication {
         val client = ClientConfig()
         val builder = HttpRequestBuilder()
 
-        val authorizationHeaderString = signatureBuilder.buildSignature(
+        val signatureBuilder = SignatureBuilder.Builder()
+            .oauthConsumerKey(consumerKey)
+            .oauthConsumerSecret(consumerSecret)
+            .build()
+
+        val authorizationHeaderString = buildSignature(
             "POST",
-            consumerKey,
-            consumerSecret,
-            null,
-            null,
-            "/oauth/access_token?oauth_token="
+            signatureBuilder,
+            "/oauth/access_token?oauth_token=",
+            emptyMap()
         )
 
         builder.url("$BASEURL/oauth/access_token?oauth_token=$authToken&oauth_verifier=$authVerifier")

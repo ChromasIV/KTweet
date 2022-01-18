@@ -8,7 +8,10 @@ on:
     branches:
       - master
       - develop
-
+  pull_request:
+    branches:
+      - master
+      - develop
 jobs:
   build:
     environment: Test
@@ -28,7 +31,7 @@ jobs:
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
     - name: Build with Gradle
-      run: gradle test
+      run: gradle test -DconsumerSecret=${{ secrets.CONSUMERSECRET }} -DaccessToken=${{ secrets.ACCESSTOKEN }} -DconsumerKey=${{ secrets.CONSUMERKEY }} -DaccessTokenSecret=${{ secrets.ACCESSTOKENSECRET }}
       env:
        consumerKey: ${{ secrets.CONSUMERKEY }}
        consumerSecret: ${{ secrets.CONSUMERSECRET }}
