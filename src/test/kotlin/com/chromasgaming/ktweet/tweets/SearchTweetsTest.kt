@@ -3,6 +3,7 @@ package com.chromasgaming.ktweet.tweets
 import com.chromasgaming.ktweet.constants.VERSION
 import com.chromasgaming.ktweet.dtos.TweetObject
 import com.chromasgaming.ktweet.oauth.SignatureBuilder
+import com.chromasgaming.ktweet.oauth.buildSignature
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
@@ -28,12 +29,16 @@ internal class SearchTweetsTest {
         paramMap["tweet.fields"] =
             "author_id"
 
-        val authorizationHeaderString = SignatureBuilder().buildSignature(
+        val signatureBuilder = SignatureBuilder.Builder()
+            .oauthConsumerKey(System.getProperty("consumerKey"))
+            .oauthConsumerSecret(System.getProperty("consumerSecret"))
+            .accessToken(System.getProperty("accessToken"))
+            .accessTokenSecret(System.getProperty("accessTokenSecret"))
+            .build()
+
+        val authorizationHeaderString = buildSignature(
             "GET",
-            System.getProperty("consumerKey"),
-            System.getProperty("consumerSecret"),
-            System.getProperty("accessToken"),
-            System.getProperty("accessTokenSecret"),
+            signatureBuilder,
             "$VERSION/tweets/search/recent",
             paramMap
         )
@@ -55,12 +60,16 @@ internal class SearchTweetsTest {
             paramMap[key] = URLEncoder.encode(value, "UTF-8").replace("+", "%20")
         }
 
-        val authorizationHeaderString = SignatureBuilder().buildSignature(
+        val signatureBuilder = SignatureBuilder.Builder()
+            .oauthConsumerKey(System.getProperty("consumerKey"))
+            .oauthConsumerSecret(System.getProperty("consumerSecret"))
+            .accessToken(System.getProperty("accessToken"))
+            .accessTokenSecret(System.getProperty("accessTokenSecret"))
+            .build()
+
+        val authorizationHeaderString = buildSignature(
             "GET",
-            System.getProperty("consumerKey"),
-            System.getProperty("consumerSecret"),
-            System.getProperty("accessToken"),
-            System.getProperty("accessTokenSecret"),
+            signatureBuilder,
             "$VERSION/tweets/search/recent",
             paramMap
         )
@@ -80,12 +89,17 @@ internal class SearchTweetsTest {
         paramMap.forEach { (key, value) ->
             paramMap[key] = URLEncoder.encode(value, "UTF-8").replace("+", "%20")
         }
-        val authorizationHeaderString = SignatureBuilder().buildSignature(
+
+        val signatureBuilder = SignatureBuilder.Builder()
+            .oauthConsumerKey(System.getProperty("consumerKey"))
+            .oauthConsumerSecret(System.getProperty("consumerSecret"))
+            .accessToken(System.getProperty("accessToken"))
+            .accessTokenSecret(System.getProperty("accessTokenSecret"))
+            .build()
+
+        val authorizationHeaderString = buildSignature(
             "GET",
-            System.getProperty("consumerKey"),
-            System.getProperty("consumerSecret"),
-            System.getProperty("accessToken"),
-            System.getProperty("accessTokenSecret"),
+            signatureBuilder,
             "$VERSION/tweets/search/recent",
             paramMap
         )
@@ -103,12 +117,17 @@ internal class SearchTweetsTest {
         paramMap.forEach { (key, value) ->
             paramMap[key] = URLEncoder.encode(value, "UTF-8").replace("+", "%20")
         }
-        val authorizationHeaderString = SignatureBuilder().buildSignature(
+
+        val signatureBuilder = SignatureBuilder.Builder()
+            .oauthConsumerKey(System.getProperty("consumerKey"))
+            .oauthConsumerSecret(System.getProperty("consumerSecret"))
+            .accessToken(System.getProperty("accessToken"))
+            .accessTokenSecret(System.getProperty("accessTokenSecret"))
+            .build()
+
+        val authorizationHeaderString = buildSignature(
             "GET",
-            System.getProperty("consumerKey"),
-            System.getProperty("consumerSecret"),
-            System.getProperty("accessToken"),
-            System.getProperty("accessTokenSecret"),
+            signatureBuilder,
             "$VERSION/tweets/search/recent",
             paramMap
         )
@@ -128,12 +147,17 @@ internal class SearchTweetsTest {
         paramMap.forEach { (key, value) ->
             paramMap[key] = URLEncoder.encode(value, "UTF-8").replace("+", "%20")
         }
-        val authorizationHeaderString = SignatureBuilder().buildSignature(
+
+        val signatureBuilder = SignatureBuilder.Builder()
+            .oauthConsumerKey(System.getProperty("consumerKey"))
+            .oauthConsumerSecret(System.getProperty("consumerSecret"))
+            .accessToken(System.getProperty("accessToken"))
+            .accessTokenSecret(System.getProperty("accessTokenSecret"))
+            .build()
+
+        val authorizationHeaderString = buildSignature(
             "GET",
-            System.getProperty("consumerKey"),
-            System.getProperty("consumerSecret"),
-            System.getProperty("accessToken"),
-            System.getProperty("accessTokenSecret"),
+            signatureBuilder,
             "$VERSION/tweets/search/recent",
             paramMap
         )
@@ -151,12 +175,16 @@ internal class SearchTweetsTest {
             paramMap[key] = URLEncoder.encode(value, "UTF-8").replace("+", "%20")
         }
 
-        val authorizationHeaderString = SignatureBuilder().buildSignature(
+        val signatureBuilder = SignatureBuilder.Builder()
+            .oauthConsumerKey(System.getProperty("consumerKey"))
+            .oauthConsumerSecret(System.getProperty("consumerSecret"))
+            .accessToken(System.getProperty("accessToken"))
+            .accessTokenSecret(System.getProperty("accessTokenSecret"))
+            .build()
+
+        val authorizationHeaderString = buildSignature(
             "GET",
-            System.getProperty("consumerKey"),
-            System.getProperty("consumerSecret"),
-            System.getProperty("accessToken"),
-            System.getProperty("accessTokenSecret"),
+            signatureBuilder,
             "$VERSION/tweets/search/recent",
             paramMap
         )
@@ -174,12 +202,16 @@ internal class SearchTweetsTest {
             paramMap[key] = URLEncoder.encode(value, "UTF-8").replace("+", "%20")
         }
 
-        val authorizationHeaderString = SignatureBuilder().buildSignature(
+        val signatureBuilder = SignatureBuilder.Builder()
+            .oauthConsumerKey(System.getProperty("consumerKey"))
+            .oauthConsumerSecret(System.getProperty("consumerSecret"))
+            .accessToken(System.getProperty("accessToken"))
+            .accessTokenSecret(System.getProperty("accessTokenSecret"))
+            .build()
+
+        val authorizationHeaderString = buildSignature(
             "GET",
-            System.getProperty("consumerKey"),
-            System.getProperty("consumerSecret"),
-            System.getProperty("accessToken"),
-            System.getProperty("accessTokenSecret"),
+            signatureBuilder,
             "$VERSION/tweets/search/recent",
             paramMap
         )

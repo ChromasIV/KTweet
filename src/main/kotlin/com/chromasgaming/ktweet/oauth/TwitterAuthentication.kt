@@ -16,16 +16,20 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpHeaders
 
 class TwitterAuthentication {
-    private var signatureBuilder = SignatureBuilder()
 
     suspend fun getRequestToken(consumerKey: String, consumerSecret: String): RequestTokenDTO {
         val client = ClientConfig()
         val builder = HttpRequestBuilder()
 
+        val signatureBuilder = SignatureBuilder.Builder()
+            .oauthConsumerKey(consumerKey)
+            .oauthConsumerSecret(consumerSecret)
+            .build()
+
         val authorizationHeaderString =
-            signatureBuilder.buildSignature(
+            buildSignature(
                 "POST",
-                consumerKey, consumerSecret, null, null,
+                signatureBuilder,
                 "oauth/request_token",
                 emptyMap()
             )
@@ -59,12 +63,14 @@ class TwitterAuthentication {
         val client = ClientConfig()
         val builder = HttpRequestBuilder()
 
-        val authorizationHeaderString = signatureBuilder.buildSignature(
+        val signatureBuilder = SignatureBuilder.Builder()
+            .oauthConsumerKey(consumerKey)
+            .oauthConsumerSecret(consumerSecret)
+            .build()
+
+        val authorizationHeaderString = buildSignature(
             "POST",
-            consumerKey,
-            consumerSecret,
-            null,
-            null,
+            signatureBuilder,
             "/oauth/access_token?oauth_token=",
             emptyMap()
         )
