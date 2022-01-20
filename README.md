@@ -4,6 +4,24 @@ KTweet is a library that allows you to use the Twitter API v2.
 
 Interested in Kotlin or KTweet? Join the [Discord](https://discord.gg/aSBXXkzb3f)
 
+## Import
+Check the latest version - [KTweet](https://search.maven.org/artifact/com.chromasgaming/ktweet)
+
+### Maven
+```
+<dependency>
+  <groupId>com.chromasgaming</groupId>
+  <artifactId>ktweet</artifactId>
+  <version>1.1.0</version>
+</dependency>
+```
+
+### Gradle Kotlin DSL
+
+```
+implementation("com.chromasgaming:ktweet:1.1.0")
+```
+
 ## Setup
 1. Obtain the API keys from your Twitter Developer portal. Follow this [guide](https://developer.twitter.com/en/docs/twitter-api/getting-started/getting-access-to-the-twitter-api).
 2. Save them locally and add them into your environment variables. 
