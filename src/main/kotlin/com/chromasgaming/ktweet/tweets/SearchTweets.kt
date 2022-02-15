@@ -12,7 +12,9 @@ import io.ktor.http.UrlEncodingOption
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.jsonObject
 
 
 class SearchTweets {
@@ -23,7 +25,7 @@ class SearchTweets {
     }
 
     suspend fun search(paramMap: LinkedHashMap<String, String>, authorizationHeaderString: String): List<TweetObject> {
-        val listTweetObject: List<TweetObject>
+        var listTweetObject: List<TweetObject> = listOf()
         runBlocking {
             val client = ClientConfig()
             val builder = HttpRequestBuilder()
@@ -38,9 +40,15 @@ class SearchTweets {
             builder.headers.append(HttpHeaders.ContentType, "application/json")
 
             val response = client.get(builder)
-            val jsonString = json.decodeFromString<JsonObject>(response.receive())["data"]
+            var jsonString: JsonElement? = null
+            val resultCount = json.decodeFromString<JsonObject>(response.receive())["meta"]
 
-            listTweetObject = json.decodeFromString(jsonString.toString())
+            if (resultCount != null) {
+                if (resultCount.jsonObject["result_count"].toString() > "0") {
+                    jsonString = json.decodeFromString<JsonObject>(response.receive())["data"]
+                    listTweetObject = json.decodeFromString(jsonString.toString())
+                }
+            }
             client.close()
         }
 
