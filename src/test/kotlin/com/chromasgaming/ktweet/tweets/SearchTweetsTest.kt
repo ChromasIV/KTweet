@@ -42,11 +42,36 @@ internal class SearchTweetsTest {
             "$VERSION/tweets/search/recent",
             paramMap
         )
-        
+
         val tweetObject: List<TweetObject> = searchTweets.search(paramMap, authorizationHeaderString)
         tweetObject.forEach {
             println(json.encodeToString(it))
         }
+    }
+
+    @Test
+    fun searchTweets_NoResults(): Unit = runBlocking {
+        val paramMap = LinkedHashMap<String, String>()
+        paramMap["query"] = "from:test"
+        paramMap["tweet.fields"] =
+            "author_id"
+
+        val signatureBuilder = SignatureBuilder.Builder()
+            .oauthConsumerKey(System.getProperty("consumerKey"))
+            .oauthConsumerSecret(System.getProperty("consumerSecret"))
+            .accessToken(System.getProperty("accessToken"))
+            .accessTokenSecret(System.getProperty("accessTokenSecret"))
+            .build()
+
+        val authorizationHeaderString = buildSignature(
+            "GET",
+            signatureBuilder,
+            "$VERSION/tweets/search/recent",
+            paramMap
+        )
+
+        val tweetObject: List<TweetObject> = searchTweets.search(paramMap, authorizationHeaderString)
+        assert(tweetObject.isEmpty())
     }
 
     @Test
