@@ -29,8 +29,6 @@ class ManageTweets {
      * @return the response in the object [ManageTweetsDTO]
      */
     suspend fun create(tweetDTO: TweetDTO, authorizationHeaderString: String): ManageTweetsDTO {
-
-
         val stringBody: ManageTweetsDTO
         runBlocking {
             val client = ClientConfig()

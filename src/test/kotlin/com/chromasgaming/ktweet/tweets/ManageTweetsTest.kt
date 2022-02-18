@@ -53,6 +53,20 @@ internal class ManageTweetsTest {
         post = manageTweets.destroy(post.data.id!!, authorizationHeaderDeleteString)
     }
 
+    @Test
+    fun createTweetReply() = runBlocking {
+        val tweetDTO = TweetDTO("Tweet #Kotlin!", null, TweetDTO.Reply(null, "1465160399976747012"))
+        post = manageTweets.create(tweetDTO, authorizationHeaderString)
+
+        val authorizationHeaderDeleteString = buildSignature(
+            "DELETE",
+            signatureBuilder,
+            "$VERSION/tweets/${post.data.id!!}",
+            emptyMap()
+        )
+        post = manageTweets.destroy(post.data.id!!, authorizationHeaderDeleteString)
+    }
+
     /** Obtain a Media ID at https://studio.twitter.com/library [TweetDTO.Media.media_ids]*/
     @Test
     fun createMediaTweet(): Unit = runBlocking {
