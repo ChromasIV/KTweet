@@ -9,7 +9,7 @@ import com.chromasgaming.ktweet.constants.TWENTY
 import com.chromasgaming.ktweet.constants.TWENTYSIX
 import com.chromasgaming.ktweet.dtos.AccessTokenDTO
 import com.chromasgaming.ktweet.dtos.RequestTokenDTO
-import io.ktor.client.call.receive
+import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.url
 import io.ktor.client.statement.HttpResponse
@@ -39,7 +39,7 @@ class TwitterAuthentication {
 
         val response: HttpResponse = client.post(builder)
 
-        val stringBody: String = response.receive()
+        val stringBody: String = response.body()
         client.close()
         return RequestTokenDTO(
             stringBody.substring(
@@ -80,7 +80,7 @@ class TwitterAuthentication {
 
         val response: HttpResponse = client.post(builder)
 
-        val stringBody: String = response.receive()
+        val stringBody: String = response.body()
         val authTokenString = stringBody.substring(
             stringBody.indexOf("oauth_token=") + TWELVE,
             stringBody.indexOf("&oauth_token_secret=")

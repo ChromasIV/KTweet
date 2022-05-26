@@ -2,22 +2,23 @@ package com.chromasgaming.ktweet.config
 
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
-import io.ktor.client.features.json.JsonFeature
-import io.ktor.client.features.json.serializer.KotlinxSerializer
-import io.ktor.client.features.logging.DEFAULT
-import io.ktor.client.features.logging.Logger
-import io.ktor.client.features.logging.Logging
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.DEFAULT
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
-import io.ktor.client.statement.HttpResponse
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 
 class ClientConfig {
 
     private val client = HttpClient(CIO) {
-        install(JsonFeature) {
-            serializer = KotlinxSerializer(json = kotlinx.serialization.json.Json {
+        install(ContentNegotiation) {
+            json(Json {
+                prettyPrint = true
                 isLenient = true
                 ignoreUnknownKeys = true
             })
@@ -27,9 +28,9 @@ class ClientConfig {
         }
     }
 
-    suspend fun get(builder: HttpRequestBuilder) = client.get<HttpResponse>(builder)
-    suspend fun post(builder: HttpRequestBuilder) = client.post<HttpResponse>(builder)
-    suspend fun delete(builder: HttpRequestBuilder) = client.delete<HttpResponse>(builder)
+    suspend fun get(builder: HttpRequestBuilder) = client.get(builder)
+    suspend fun post(builder: HttpRequestBuilder) = client.post(builder)
+    suspend fun delete(builder: HttpRequestBuilder) = client.delete(builder)
 
     fun close() = client.close()
 }
