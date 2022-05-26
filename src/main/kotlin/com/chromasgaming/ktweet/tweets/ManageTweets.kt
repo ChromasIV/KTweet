@@ -5,8 +5,9 @@ import com.chromasgaming.ktweet.constants.BASEURL
 import com.chromasgaming.ktweet.constants.VERSION
 import com.chromasgaming.ktweet.dtos.ManageTweetsDTO
 import com.chromasgaming.ktweet.dtos.TweetDTO
-import io.ktor.client.call.receive
+import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.http.HttpHeaders
 import kotlinx.coroutines.runBlocking
@@ -29,20 +30,18 @@ class ManageTweets {
      * @return the response in the object [ManageTweetsDTO]
      */
     suspend fun create(tweetDTO: TweetDTO, authorizationHeaderString: String): ManageTweetsDTO {
-
-
         val stringBody: ManageTweetsDTO
         runBlocking {
             val client = ClientConfig()
             val builder = HttpRequestBuilder()
             builder.url("$BASEURL/$VERSION/tweets")
 
-            builder.body = json.decodeFromString<JsonObject>(json.encodeToString(tweetDTO))
+            builder.setBody(json.decodeFromString<JsonObject>(json.encodeToString(tweetDTO)))
             builder.headers.append(HttpHeaders.Authorization, authorizationHeaderString)
             builder.headers.append(HttpHeaders.ContentType, "application/json")
 
             val response = client.post(builder)
-            stringBody = response.receive()
+            stringBody = response.body()
             client.close()
         }
         return stringBody
@@ -62,7 +61,7 @@ class ManageTweets {
             builder.headers.append(HttpHeaders.Authorization, authorizationHeaderString)
 
             val response = client.delete(builder)
-            stringBody = response.receive()
+            stringBody = response.body()
             client.close()
         }
         return stringBody
