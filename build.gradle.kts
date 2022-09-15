@@ -1,7 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val ktorVersion: String by project
-
 plugins {
 
     kotlin("jvm") version "1.7.10"
@@ -16,7 +14,6 @@ group = "com.chromasgaming"
 version = "1.2.1"
 
 val ktorVersion: String by project
-
 
 val dokkaHtml by tasks.getting(org.jetbrains.dokka.gradle.DokkaTask::class)
 
