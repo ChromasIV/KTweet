@@ -5,16 +5,12 @@ import com.chromasgaming.ktweet.constants.BASEURL
 import com.chromasgaming.ktweet.constants.VERSION
 import com.chromasgaming.ktweet.dtos.ManageTweetsDTO
 import com.chromasgaming.ktweet.dtos.TweetDTO
-import io.ktor.client.call.receive
-import io.ktor.client.request.HttpRequestBuilder
-import io.ktor.client.request.url
-import io.ktor.http.HttpHeaders
+import io.ktor.client.call.*
+import io.ktor.client.request.*
+import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonObject
 
 /**
  * This class handles all API calls that exist under ManagerTweets.
@@ -23,6 +19,7 @@ import kotlinx.serialization.json.JsonObject
 @ExperimentalSerializationApi
 class ManageTweets {
     private val json = Json { encodeDefaults = false }
+
 
     /**
      * Creates a [tweetDTO].
@@ -35,12 +32,12 @@ class ManageTweets {
             val builder = HttpRequestBuilder()
             builder.url("$BASEURL/$VERSION/tweets")
 
-            builder.body = json.decodeFromString<JsonObject>(json.encodeToString(tweetDTO))
+            builder.setBody(tweetDTO)
             builder.headers.append(HttpHeaders.Authorization, authorizationHeaderString)
             builder.headers.append(HttpHeaders.ContentType, "application/json")
 
             val response = client.post(builder)
-            stringBody = response.receive()
+            stringBody = response.body()
             client.close()
         }
         return stringBody
@@ -60,7 +57,7 @@ class ManageTweets {
             builder.headers.append(HttpHeaders.Authorization, authorizationHeaderString)
 
             val response = client.delete(builder)
-            stringBody = response.receive()
+            stringBody = response.body()
             client.close()
         }
         return stringBody
