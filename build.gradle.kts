@@ -3,16 +3,20 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 val ktorVersion: String by project
 
 plugins {
-    kotlin("jvm") version "1.6.21"
-    kotlin("plugin.serialization") version "1.6.21"
-    id("org.jetbrains.dokka") version "1.6.0"
+
+    kotlin("jvm") version "1.7.10"
+    kotlin("plugin.serialization") version "1.7.10"
+    id("org.jetbrains.dokka") version "1.7.10"
     id("maven-publish")
     id("signing")
     id("io.gitlab.arturbosch.detekt") version("1.19.0")
 }
 
 group = "com.chromasgaming"
-version = "1.2.0"
+version = "1.2.1"
+
+val ktorVersion: String by project
+
 
 val dokkaHtml by tasks.getting(org.jetbrains.dokka.gradle.DokkaTask::class)
 
@@ -28,15 +32,17 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    
-    implementation("org.junit.jupiter:junit-jupiter:5.8.1")
+
+    implementation("org.junit.jupiter:junit-jupiter:5.9.0")
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+    implementation("io.ktor:ktor-client-serialization:$ktorVersion")
     implementation("io.ktor:ktor-client-auth:$ktorVersion")
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
-
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+    implementation(kotlin("stdlib-jdk8"))
+
 }
 
 java {

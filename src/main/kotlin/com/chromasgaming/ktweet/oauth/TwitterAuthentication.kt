@@ -1,19 +1,13 @@
 package com.chromasgaming.ktweet.oauth
 
 import com.chromasgaming.ktweet.config.ClientConfig
-import com.chromasgaming.ktweet.constants.BASEURL
-import com.chromasgaming.ktweet.constants.NINE
-import com.chromasgaming.ktweet.constants.THIRTEEN
-import com.chromasgaming.ktweet.constants.TWELVE
-import com.chromasgaming.ktweet.constants.TWENTY
-import com.chromasgaming.ktweet.constants.TWENTYSIX
+import com.chromasgaming.ktweet.constants.*
 import com.chromasgaming.ktweet.dtos.AccessTokenDTO
 import com.chromasgaming.ktweet.dtos.RequestTokenDTO
-import io.ktor.client.call.body
-import io.ktor.client.request.HttpRequestBuilder
-import io.ktor.client.request.url
-import io.ktor.client.statement.HttpResponse
-import io.ktor.http.HttpHeaders
+import io.ktor.client.call.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
 
 class TwitterAuthentication {
 
