@@ -31,7 +31,6 @@ class ManageTweets {
             val client = ClientConfig()
             val builder = HttpRequestBuilder()
             builder.url("$BASEURL/$VERSION/tweets")
-
             builder.setBody(tweetDTO)
             builder.headers.append(HttpHeaders.Authorization, authorizationHeaderString)
             builder.headers.append(HttpHeaders.ContentType, "application/json")
