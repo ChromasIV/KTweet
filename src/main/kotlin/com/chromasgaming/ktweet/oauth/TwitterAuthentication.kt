@@ -2,7 +2,7 @@ package com.chromasgaming.ktweet.oauth
 
 import com.chromasgaming.ktweet.config.ClientConfig
 import com.chromasgaming.ktweet.constants.*
-import com.chromasgaming.ktweet.dtos.AccessTokenDTO
+import com.chromasgaming.ktweet.dtos.AccessToken
 import com.chromasgaming.ktweet.dtos.RequestTokenDTO
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -53,7 +53,7 @@ class TwitterAuthentication {
         consumerSecret: String,
         authToken: String,
         authVerifier: String
-    ): AccessTokenDTO {
+    ): AccessToken {
         val client = ClientConfig()
         val builder = HttpRequestBuilder()
 
@@ -87,7 +87,6 @@ class TwitterAuthentication {
         val userName = stringBody.substring(stringBody.indexOf("&screen_name=") + THIRTEEN)
         client.close()
 
-        return AccessTokenDTO(authTokenString, authSecret, userId, userName)
+        return AccessToken(authTokenString, authSecret, userId, userName)
     }
 }
-
