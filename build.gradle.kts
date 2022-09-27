@@ -7,11 +7,11 @@ plugins {
     id("org.jetbrains.dokka") version "1.7.10"
     id("maven-publish")
     id("signing")
-    id("io.gitlab.arturbosch.detekt") version("1.19.0")
+    id("io.gitlab.arturbosch.detekt") version "1.19.0"
 }
 
 group = "com.chromasgaming"
-version = "1.2.1"
+version = "1.3.0"
 
 val ktorVersion: String by project
 
@@ -120,6 +120,8 @@ tasks.test {
     systemProperty("consumerSecret", System.getProperty("consumerSecret"))
     systemProperty("accessToken", System.getProperty("accessToken"))
     systemProperty("accessTokenSecret", System.getProperty("accessTokenSecret"))
+    systemProperty("clientId", System.getProperty("clientId"))
+    systemProperty("clientSecret", System.getProperty("clientSecret"))
 
     onlyIf { !project.hasProperty("skipTests")}
 }
