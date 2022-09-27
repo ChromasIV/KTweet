@@ -1,4 +1,4 @@
-package com.chromasgaming.ktweet.dtos
+package com.chromasgaming.ktweet.models
 
 import kotlinx.serialization.Serializable
 
@@ -10,4 +10,10 @@ data class TweetCount(val data: List<Data>, val meta: Meta) {
 
     @Serializable
     data class Meta(val total_tweet_count: Int)
+}
+
+enum class Granularity(val value: String) {
+    DAY("day"),
+    HOUR("hour"),
+    MINUTE("minute");
 }

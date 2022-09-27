@@ -1,27 +1,29 @@
-package com.chromasgaming.ktweet.tweets
+package com.chromasgaming.ktweet.api
 
 import com.chromasgaming.ktweet.config.ClientConfig
 import com.chromasgaming.ktweet.constants.BASEURL
 import com.chromasgaming.ktweet.constants.VERSION
-import com.chromasgaming.ktweet.dtos.TweetObject
-import io.ktor.client.call.*
-import io.ktor.client.request.*
-import io.ktor.http.*
+import com.chromasgaming.ktweet.models.TweetObject
+import com.chromasgaming.ktweet.util.defaultJson
+import io.ktor.client.call.body
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.url
+import io.ktor.http.HttpHeaders
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonObject
 
-
-class SearchTweets {
-
-    private val json = Json {
-        encodeDefaults = false
-        ignoreUnknownKeys = true
-    }
-
+/**
+ * This class handles all API calls that exist under Search Tweets.
+ * API Reference [Twitter API](https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference).
+ */
+class SearchTweetsAPI {
+    /**
+     *  Search for Tweets published in the last 7 days
+     *  @return the response in the object List[TweetObject]
+     */
     suspend fun search(paramMap: LinkedHashMap<String, String>, authorizationHeaderString: String): List<TweetObject> {
         var listTweetObject: List<TweetObject> = listOf()
         runBlocking {
@@ -37,13 +39,13 @@ class SearchTweets {
             builder.headers.append(HttpHeaders.ContentType, "application/json")
 
             val response = client.get(builder)
-            var jsonString: JsonElement?
-            val resultCount = json.decodeFromString<JsonObject>(response.body())["meta"]
+            val jsonString: JsonElement?
+            val resultCount = defaultJson.decodeFromString<JsonObject>(response.body())["meta"]
 
             if (resultCount != null) {
                 if (resultCount.jsonObject["result_count"].toString() > "0") {
-                    jsonString = json.decodeFromString<JsonObject>(response.body())["data"]
-                    listTweetObject = json.decodeFromString(jsonString.toString())
+                    jsonString = defaultJson.decodeFromString<JsonObject>(response.body())["data"]
+                    listTweetObject = defaultJson.decodeFromString(jsonString.toString())
                 }
             }
             client.close()

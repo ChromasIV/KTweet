@@ -1,17 +1,23 @@
 package com.chromasgaming.ktweet.oauth
 
 import com.chromasgaming.ktweet.config.ClientConfig
-import com.chromasgaming.ktweet.constants.*
-import com.chromasgaming.ktweet.dtos.AccessToken
-import com.chromasgaming.ktweet.dtos.RequestTokenDTO
-import io.ktor.client.call.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
+import com.chromasgaming.ktweet.constants.BASEURL
+import com.chromasgaming.ktweet.constants.NINE
+import com.chromasgaming.ktweet.constants.THIRTEEN
+import com.chromasgaming.ktweet.constants.TWELVE
+import com.chromasgaming.ktweet.constants.TWENTY
+import com.chromasgaming.ktweet.constants.TWENTYSIX
+import com.chromasgaming.ktweet.models.AccessToken
+import com.chromasgaming.ktweet.models.RequestToken
+import io.ktor.client.call.body
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.url
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.HttpHeaders
 
 class TwitterAuthentication {
 
-    suspend fun getRequestToken(consumerKey: String, consumerSecret: String): RequestTokenDTO {
+    suspend fun getRequestToken(consumerKey: String, consumerSecret: String): RequestToken {
         val client = ClientConfig()
         val builder = HttpRequestBuilder()
 
@@ -35,7 +41,7 @@ class TwitterAuthentication {
 
         val stringBody: String = response.body()
         client.close()
-        return RequestTokenDTO(
+        return RequestToken(
             stringBody.substring(
                 stringBody.indexOf("oauth_token=") + TWELVE,
                 stringBody.indexOf("&oauth_token_secret")

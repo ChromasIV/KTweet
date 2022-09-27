@@ -1,33 +1,34 @@
-package com.chromasgaming.ktweet.tweets
+package com.chromasgaming.ktweet.api
 
+import com.chromasgaming.ktweet.models.Granularity
 import com.chromasgaming.ktweet.oauth2.TwitterOauth2Authentication
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-internal class CountTweetsTest {
-    private lateinit var countTweets: CountTweets
-    private val json = Json { encodeDefaults = false }
+internal class CountTweetsAPITest {
+    private lateinit var countTweetsAPI: CountTweetsAPI
 
 
     @BeforeEach
     fun setUp() {
-        countTweets = CountTweets()
+        countTweetsAPI = CountTweetsAPI()
     }
 
     @Test
     fun recentTweets(): Unit = runBlocking {
         val paramMap = LinkedHashMap<String, String>()
-        paramMap["query"] = "from:ChromasIV"
-        paramMap["granularity"] = Granularity.day.name
-
+        paramMap["query"] = "from:250181762"
+        paramMap["granularity"] = Granularity.DAY.value
 
         val bearerToken = TwitterOauth2Authentication().getAppOnlyBearerToken(
             System.getProperty("consumerKey"),
             System.getProperty("consumerSecret")
         )
 
-        println(countTweets.recent(paramMap, bearerToken))
+        val tweetCount = countTweetsAPI.recent(paramMap, bearerToken)
+
+        assert(tweetCount.data.isNotEmpty())
+        assert(tweetCount.meta.total_tweet_count >= 0)
     }
 }

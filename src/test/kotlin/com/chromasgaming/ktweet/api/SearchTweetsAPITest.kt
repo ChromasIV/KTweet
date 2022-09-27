@@ -1,25 +1,24 @@
-package com.chromasgaming.ktweet.tweets
+package com.chromasgaming.ktweet.api
 
 import com.chromasgaming.ktweet.constants.VERSION
-import com.chromasgaming.ktweet.dtos.TweetObject
+import com.chromasgaming.ktweet.models.TweetObject
 import com.chromasgaming.ktweet.oauth.SignatureBuilder
 import com.chromasgaming.ktweet.oauth.buildSignature
+import com.chromasgaming.ktweet.util.defaultJson
+import java.net.URLEncoder
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.net.URLEncoder
 
 @ExperimentalSerializationApi
-internal class SearchTweetsTest {
-    private lateinit var searchTweets: SearchTweets
-    private val json = Json { encodeDefaults = false }
+internal class SearchTweetsAPITest {
+    private lateinit var searchTweetsAPI: SearchTweetsAPI
 
     @BeforeEach
     fun setUp() {
-        searchTweets = SearchTweets()
+        searchTweetsAPI = SearchTweetsAPI()
     }
 
     @Test
@@ -43,9 +42,9 @@ internal class SearchTweetsTest {
             paramMap
         )
 
-        val tweetObject: List<TweetObject> = searchTweets.search(paramMap, authorizationHeaderString)
+        val tweetObject: List<TweetObject> = searchTweetsAPI.search(paramMap, authorizationHeaderString)
         tweetObject.forEach {
-            println(json.encodeToString(it))
+            println(defaultJson.encodeToString(it))
         }
     }
 
@@ -70,7 +69,7 @@ internal class SearchTweetsTest {
             paramMap
         )
 
-        val tweetObject: List<TweetObject> = searchTweets.search(paramMap, authorizationHeaderString)
+        val tweetObject: List<TweetObject> = searchTweetsAPI.search(paramMap, authorizationHeaderString)
         assert(tweetObject.isEmpty())
     }
 
@@ -99,9 +98,9 @@ internal class SearchTweetsTest {
             paramMap
         )
 
-        val tweetObject: List<TweetObject> = searchTweets.search(paramMap, authorizationHeaderString)
+        val tweetObject: List<TweetObject> = searchTweetsAPI.search(paramMap, authorizationHeaderString)
         tweetObject.forEach {
-            println(json.encodeToString(it))
+            println(defaultJson.encodeToString(it))
         }
     }
 
@@ -129,7 +128,7 @@ internal class SearchTweetsTest {
             paramMap
         )
 
-        val tweetObject: List<TweetObject> = searchTweets.search(paramMap, authorizationHeaderString)
+        val tweetObject: List<TweetObject> = searchTweetsAPI.search(paramMap, authorizationHeaderString)
         print(tweetObject)
     }
 
@@ -157,7 +156,7 @@ internal class SearchTweetsTest {
             paramMap
         )
 
-        val tweetObject: List<TweetObject> = searchTweets.search(paramMap, authorizationHeaderString)
+        val tweetObject: List<TweetObject> = searchTweetsAPI.search(paramMap, authorizationHeaderString)
         print(tweetObject)
     }
 
@@ -187,7 +186,7 @@ internal class SearchTweetsTest {
             paramMap
         )
 
-        val tweetObject: List<TweetObject> = searchTweets.search(paramMap, authorizationHeaderString)
+        val tweetObject: List<TweetObject> = searchTweetsAPI.search(paramMap, authorizationHeaderString)
         print(tweetObject)
     }
 
@@ -214,7 +213,7 @@ internal class SearchTweetsTest {
             paramMap
         )
 
-        val tweetObject: List<TweetObject> = searchTweets.search(paramMap, authorizationHeaderString)
+        val tweetObject: List<TweetObject> = searchTweetsAPI.search(paramMap, authorizationHeaderString)
         print(tweetObject)
     }
 
@@ -241,7 +240,7 @@ internal class SearchTweetsTest {
             paramMap
         )
 
-        val tweetObject: List<TweetObject> = searchTweets.search(paramMap, authorizationHeaderString)
+        val tweetObject: List<TweetObject> = searchTweetsAPI.search(paramMap, authorizationHeaderString)
         print(tweetObject)
     }
 

@@ -1,37 +1,36 @@
-package com.chromasgaming.ktweet.tweets
+package com.chromasgaming.ktweet.api
 
 import com.chromasgaming.ktweet.config.ClientConfig
 import com.chromasgaming.ktweet.constants.BASEURL
 import com.chromasgaming.ktweet.constants.VERSION
-import com.chromasgaming.ktweet.dtos.ManageTweetsDTO
-import com.chromasgaming.ktweet.dtos.TweetDTO
-import io.ktor.client.call.*
-import io.ktor.client.request.*
-import io.ktor.http.*
+import com.chromasgaming.ktweet.models.ManageTweets
+import com.chromasgaming.ktweet.models.Tweet
+import io.ktor.client.call.body
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.setBody
+import io.ktor.client.request.url
+import io.ktor.http.HttpHeaders
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.json.Json
 
 /**
  * This class handles all API calls that exist under ManagerTweets.
  * API Reference [Twitter API](https://developer.twitter.com/en/docs/twitter-api/tweets/manage-tweets/api-reference).
  */
 @ExperimentalSerializationApi
-class ManageTweets {
-    private val json = Json { encodeDefaults = false }
-
+class ManageTweetsAPI {
 
     /**
-     * Creates a [tweetDTO].
-     * @return the response in the object [ManageTweetsDTO]
+     * Creates a [tweet].
+     * @return the response in the object [ManageTweets]
      */
-    suspend fun create(tweetDTO: TweetDTO, authorizationHeaderString: String): ManageTweetsDTO {
-        val stringBody: ManageTweetsDTO
+    suspend fun create(tweet: Tweet, authorizationHeaderString: String): ManageTweets {
+        val stringBody: ManageTweets
         runBlocking {
             val client = ClientConfig()
             val builder = HttpRequestBuilder()
             builder.url("$BASEURL/$VERSION/tweets")
-            builder.setBody(tweetDTO)
+            builder.setBody(tweet)
             builder.headers.append(HttpHeaders.Authorization, authorizationHeaderString)
             builder.headers.append(HttpHeaders.ContentType, "application/json")
 
@@ -44,11 +43,11 @@ class ManageTweets {
 
     /**
      * Deletes a tweet by [id].
-     * @return the response in the object [ManageTweetsDTO]
+     * @return the response in the object [ManageTweets]
      */
-    suspend fun destroy(id: String, authorizationHeaderString: String): ManageTweetsDTO {
+    suspend fun destroy(id: String, authorizationHeaderString: String): ManageTweets {
 
-        val stringBody: ManageTweetsDTO
+        val stringBody: ManageTweets
         runBlocking {
             val client = ClientConfig()
             val builder = HttpRequestBuilder()

@@ -1,31 +1,27 @@
-package com.chromasgaming.ktweet.tweets
+package com.chromasgaming.ktweet.api
 
 import com.chromasgaming.ktweet.config.ClientConfig
 import com.chromasgaming.ktweet.constants.BASEURL
 import com.chromasgaming.ktweet.constants.VERSION
-import com.chromasgaming.ktweet.dtos.BearerToken
-import com.chromasgaming.ktweet.dtos.TweetCount
-import io.ktor.client.call.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
+import com.chromasgaming.ktweet.models.BearerToken
+import com.chromasgaming.ktweet.models.TweetCount
+import io.ktor.client.call.body
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.url
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.HttpHeaders
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.json.Json
 
-enum class Granularity {
-    day,
-    hour,
-    minute
-}
+/**
+ * This class handles all API calls that exist under Tweet Counts.
+ * API Reference [Twitter API](https://developer.twitter.com/en/docs/twitter-api/tweets/counts/api-reference).
+ */
+class CountTweetsAPI {
 
-class CountTweets {
-
-    //https://api.twitter.com/2/tweets/counts/recent?query=from%3ATwitterDev&granularity=day
-    private val json = Json {
-        encodeDefaults = false
-        ignoreUnknownKeys = true
-    }
-
+    /**
+     * Receive a count of Tweets [TweetCount] that match a query in the last 7 days
+     * @return the response in the object [TweetCount]
+     */
     suspend fun recent(paramMap: LinkedHashMap<String, String>, bearerToken: BearerToken): TweetCount {
         var response: HttpResponse
         runBlocking {
