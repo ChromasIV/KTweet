@@ -13,6 +13,8 @@ import io.ktor.client.request.forms.submitForm
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.request.post
+import io.ktor.client.request.request
+import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpHeaders
 import io.ktor.http.Parameters
 import io.ktor.serialization.kotlinx.json.json
@@ -32,6 +34,8 @@ class ClientConfig {
             })
         }
     }
+
+    suspend fun execute(builder: HttpRequestBuilder): HttpResponse = client.request(builder)
 
     suspend fun get(builder: HttpRequestBuilder) = client.get(builder)
     suspend fun post(builder: HttpRequestBuilder) = client.post(builder)

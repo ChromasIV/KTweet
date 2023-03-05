@@ -38,6 +38,9 @@ dependencies {
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+
+    implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
+
     implementation(kotlin("stdlib-jdk8"))
 
 }
@@ -123,7 +126,7 @@ tasks.test {
     systemProperty("clientId", System.getProperty("clientId"))
     systemProperty("clientSecret", System.getProperty("clientSecret"))
 
-    onlyIf { !project.hasProperty("skipTests")}
+    onlyIf { !project.hasProperty("skipTests") }
 }
 
 tasks.withType<KotlinCompile> {
