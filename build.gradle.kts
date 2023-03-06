@@ -30,7 +30,9 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
 
-    implementation("org.junit.jupiter:junit-jupiter:5.9.0")
+    implementation("org.junit.jupiter:junit-jupiter:5.9.0") {
+        exclude("META-INF/LICENSE.md")
+    }
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-serialization:$ktorVersion")
