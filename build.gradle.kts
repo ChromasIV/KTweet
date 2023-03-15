@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "com.chromasgaming"
-version = "1.3.0"
+version = "2.0.0-Alpha"
 
 val ktorVersion: String by project
 val kotlinxCoroutinesVersion: String by project
