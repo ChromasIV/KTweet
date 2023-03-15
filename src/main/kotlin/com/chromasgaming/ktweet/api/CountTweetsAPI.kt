@@ -10,6 +10,7 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.url
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
 import kotlinx.coroutines.runBlocking
 
 /**
@@ -27,6 +28,7 @@ class CountTweetsAPI {
         runBlocking {
             val client = ClientConfig()
             val builder = HttpRequestBuilder()
+            builder.method = HttpMethod.Get
             builder.url("$BASEURL/$VERSION/tweets/counts/recent")
 
             paramMap.forEach { (key, value) ->
@@ -35,7 +37,7 @@ class CountTweetsAPI {
 
             builder.headers.append(HttpHeaders.Authorization, "Bearer ${bearerToken.access_token}")
             builder.headers.append(HttpHeaders.ContentType, "application/json")
-            response = client.get(builder)
+            response = client.execute(builder)
 
             client.close()
         }
