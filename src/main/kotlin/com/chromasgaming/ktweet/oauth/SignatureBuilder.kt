@@ -1,7 +1,7 @@
 package com.chromasgaming.ktweet.oauth
 
-import com.chromasgaming.ktweet.constants.BASEURL
-import com.chromasgaming.ktweet.constants.MILLISECONDS
+import com.chromasgaming.ktweet.util.BASEURL
+import com.chromasgaming.ktweet.util.MILLISECONDS
 import io.ktor.http.auth.HttpAuthHeader
 import java.net.URLEncoder
 import java.util.*

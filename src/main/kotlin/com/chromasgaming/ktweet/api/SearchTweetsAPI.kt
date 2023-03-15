@@ -2,10 +2,10 @@ package com.chromasgaming.ktweet.api
 
 import TwitterSearch
 import com.chromasgaming.ktweet.config.ClientConfig
-import com.chromasgaming.ktweet.constants.BASEURL
-import com.chromasgaming.ktweet.constants.VERSION
 import com.chromasgaming.ktweet.models.TweetObject
+import com.chromasgaming.ktweet.util.BASEURL
 import com.chromasgaming.ktweet.util.HttpRequestBuilderWrapper
+import com.chromasgaming.ktweet.util.VERSION
 import io.ktor.client.call.body
 import io.ktor.client.request.headers
 import io.ktor.http.ContentType
@@ -14,11 +14,13 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.append
 import io.ktor.http.isSuccess
 
+private val clientConfig = ClientConfig()
+
 /**
  * This class handles all API calls that exist under Search Tweets.
  * API Reference [Twitter API](https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference).
  */
-class SearchTweetsAPI(private val client: ClientConfig) {
+class SearchTweetsAPI() {
     /**
      *  Search for Tweets published in the last 7 days
      *  @return the response in the object List[TweetObject]
@@ -40,7 +42,7 @@ class SearchTweetsAPI(private val client: ClientConfig) {
             }
         }.build()
 
-        val response = client.execute(builder)
+        val response = clientConfig.execute(builder)
         if (response.status.isSuccess()) {
             val body = response.body<TwitterSearch>()
 
@@ -48,7 +50,7 @@ class SearchTweetsAPI(private val client: ClientConfig) {
                 listTweetObject = body.tweets
             }
         }
-        client.close()
+        clientConfig.close()
 
         return listTweetObject
     }

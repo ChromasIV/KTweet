@@ -1,5 +1,6 @@
 package com.chromasgaming.ktweet.config
 
+import com.chromasgaming.ktweet.util.defaultJson
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -16,8 +17,6 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.Parameters
 import io.ktor.http.append
-import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.json.Json
 
 class ClientConfig {
 
@@ -27,10 +26,7 @@ class ClientConfig {
             level = LogLevel.NONE
         }
         install(ContentNegotiation) {
-            json(Json {
-                ignoreUnknownKeys = true
-                isLenient = true
-            })
+            defaultJson
         }
     }
 

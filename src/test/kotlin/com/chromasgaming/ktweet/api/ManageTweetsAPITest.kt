@@ -1,11 +1,11 @@
 package com.chromasgaming.ktweet.api
 
 import com.chromasgaming.ktweet.config.ClientConfig
-import com.chromasgaming.ktweet.constants.VERSION
 import com.chromasgaming.ktweet.models.ManageTweets
 import com.chromasgaming.ktweet.models.Tweet
 import com.chromasgaming.ktweet.oauth.SignatureBuilder
 import com.chromasgaming.ktweet.oauth.buildSignature
+import com.chromasgaming.ktweet.util.VERSION
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.ExperimentalSerializationApi
 import org.junit.jupiter.api.BeforeEach
@@ -37,7 +37,7 @@ internal class ManageTweetsAPITest {
             emptyMap()
         )
 
-        manageTweets = TwitterManageTweetsApi(clientConfig, authorizationHeaderString)
+        manageTweets = TwitterManageTweetsApi(authorizationHeaderString)
 
     }
 
@@ -94,7 +94,7 @@ internal class ManageTweetsAPITest {
             "$VERSION/tweets/$id",
             emptyMap()
         )
-        manageTweets = TwitterManageTweetsApi(clientConfig, authorizationHeaderDeleteString)
+        manageTweets = TwitterManageTweetsApi(authorizationHeaderDeleteString)
         post = manageTweets.destroy(id)
     }
 }

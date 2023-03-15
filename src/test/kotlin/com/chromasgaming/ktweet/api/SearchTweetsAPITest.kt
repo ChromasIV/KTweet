@@ -1,10 +1,10 @@
 package com.chromasgaming.ktweet.api
 
 import com.chromasgaming.ktweet.config.ClientConfig
-import com.chromasgaming.ktweet.constants.VERSION
 import com.chromasgaming.ktweet.models.TweetObject
 import com.chromasgaming.ktweet.oauth.SignatureBuilder
 import com.chromasgaming.ktweet.oauth.buildSignature
+import com.chromasgaming.ktweet.util.VERSION
 import io.ktor.serialization.JsonConvertException
 import java.net.URLEncoder
 import kotlinx.coroutines.test.runTest

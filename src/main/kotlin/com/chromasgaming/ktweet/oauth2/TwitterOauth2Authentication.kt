@@ -1,8 +1,8 @@
 package com.chromasgaming.ktweet.oauth2
 
 import com.chromasgaming.ktweet.config.ClientConfig
-import com.chromasgaming.ktweet.constants.BASEURL
 import com.chromasgaming.ktweet.models.BearerToken
+import com.chromasgaming.ktweet.util.BASEURL
 import com.chromasgaming.ktweet.util.HttpRequestBuilderWrapper
 import io.ktor.client.call.body
 import io.ktor.client.request.headers

@@ -1,11 +1,11 @@
 package com.chromasgaming.ktweet.api
 
 import com.chromasgaming.ktweet.config.ClientConfig
-import com.chromasgaming.ktweet.constants.BASEURL
-import com.chromasgaming.ktweet.constants.VERSION
 import com.chromasgaming.ktweet.models.ManageTweets
 import com.chromasgaming.ktweet.models.Tweet
+import com.chromasgaming.ktweet.util.BASEURL
 import com.chromasgaming.ktweet.util.HttpRequestBuilderWrapper
+import com.chromasgaming.ktweet.util.VERSION
 import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.RedirectResponseException
@@ -42,6 +42,8 @@ interface ManageTweetsApi {
     suspend fun destroy(id: String): ManageTweets
 }
 
+private val clientConfig = ClientConfig()
+
 /**
  * This class implements the [ManageTweetsApi] interface using the Twitter API.
  * @param clientConfig the [ClientConfig] object to use for HTTP requests
@@ -49,7 +51,6 @@ interface ManageTweetsApi {
  */
 @ExperimentalSerializationApi
 class TwitterManageTweetsApi(
-    private val clientConfig: ClientConfig,
     private val authorizationHeaderString: String
 ) : ManageTweetsApi {
 
