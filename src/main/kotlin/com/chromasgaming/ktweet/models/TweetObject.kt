@@ -1,6 +1,7 @@
 package com.chromasgaming.ktweet.models
 
 import kotlinx.serialization.Contextual
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 
@@ -10,6 +11,7 @@ import kotlinx.serialization.json.JsonObject
 data class TweetObject(
     val id: String,
     val text: String,
+    @SerialName("edit_history_tweet_ids") val editHistoryTweetIds: List<String>,
     val attachments: Attachments? = null,
     val author_id: String? = null,
     val context_annotations: List<JsonObject>? = null,
