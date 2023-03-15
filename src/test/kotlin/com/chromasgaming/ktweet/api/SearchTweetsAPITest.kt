@@ -1,39 +1,49 @@
 package com.chromasgaming.ktweet.api
 
+import com.chromasgaming.ktweet.config.ClientConfig
 import com.chromasgaming.ktweet.constants.VERSION
 import com.chromasgaming.ktweet.models.TweetObject
 import com.chromasgaming.ktweet.oauth.SignatureBuilder
 import com.chromasgaming.ktweet.oauth.buildSignature
-import com.chromasgaming.ktweet.util.defaultJson
+import io.ktor.serialization.JsonConvertException
 import java.net.URLEncoder
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.encodeToString
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 @ExperimentalSerializationApi
 internal class SearchTweetsAPITest {
     private lateinit var searchTweetsAPI: SearchTweetsAPI
+    private lateinit var signatureBuilder: SignatureBuilder
+
+    private val clientConfig = ClientConfig()
 
     @BeforeEach
     fun setUp() {
-        searchTweetsAPI = SearchTweetsAPI()
-    }
-
-    @Test
-    fun searchTweets(): Unit = runBlocking {
-        val paramMap = LinkedHashMap<String, String>()
-        paramMap["query"] = "kotlin"
-        paramMap["tweet.fields"] =
-            "author_id"
-
-        val signatureBuilder = SignatureBuilder.Builder()
+        signatureBuilder = SignatureBuilder.Builder()
             .oauthConsumerKey(System.getProperty("consumerKey"))
             .oauthConsumerSecret(System.getProperty("consumerSecret"))
             .accessToken(System.getProperty("accessToken"))
             .accessTokenSecret(System.getProperty("accessTokenSecret"))
             .build()
+
+        searchTweetsAPI = SearchTweetsAPI(clientConfig)
+    }
+
+    @Test
+    fun searchTweets() = runTest {
+        val paramMap = LinkedHashMap<String, String>()
+        paramMap["query"] = "cat"
+        paramMap["tweet.fields"] =
+            "author_id"
+
+        paramMap.forEach { (key, value) ->
+            paramMap[key] = URLEncoder.encode(value, "UTF-8").replace("+", "%20")
+        }
 
         val authorizationHeaderString = buildSignature(
             "GET",
@@ -42,25 +52,20 @@ internal class SearchTweetsAPITest {
             paramMap
         )
 
-        val tweetObject: List<TweetObject> = searchTweetsAPI.search(paramMap, authorizationHeaderString)
-        tweetObject.forEach {
-            println(defaultJson.encodeToString(it))
-        }
+        val tweetObject: List<TweetObject> = searchTweetsAPI.searchTweet(paramMap, authorizationHeaderString)
+        assertTrue(tweetObject.isNotEmpty())
     }
 
     @Test
-    fun searchTweets_NoResults(): Unit = runBlocking {
+    fun searchTweets_NoResults() = runTest {
         val paramMap = LinkedHashMap<String, String>()
         paramMap["query"] = "from:test"
         paramMap["tweet.fields"] =
             "author_id"
 
-        val signatureBuilder = SignatureBuilder.Builder()
-            .oauthConsumerKey(System.getProperty("consumerKey"))
-            .oauthConsumerSecret(System.getProperty("consumerSecret"))
-            .accessToken(System.getProperty("accessToken"))
-            .accessTokenSecret(System.getProperty("accessTokenSecret"))
-            .build()
+        paramMap.forEach { (key, value) ->
+            paramMap[key] = URLEncoder.encode(value, "UTF-8").replace("+", "%20")
+        }
 
         val authorizationHeaderString = buildSignature(
             "GET",
@@ -69,14 +74,15 @@ internal class SearchTweetsAPITest {
             paramMap
         )
 
-        val tweetObject: List<TweetObject> = searchTweetsAPI.search(paramMap, authorizationHeaderString)
-        assert(tweetObject.isEmpty())
+        assertThrows<JsonConvertException>("No data available.") {
+            val tweetObject: List<TweetObject> = searchTweetsAPI.searchTweet(paramMap, authorizationHeaderString)
+        }
     }
 
     @Test
-    fun searchTweets_hasMedia(): Unit = runBlocking {
+    fun searchTweets_hasMedia() = runTest {
         val paramMap = LinkedHashMap<String, String>()
-        paramMap["query"] = "kotlin has:media"
+        paramMap["query"] = "(from:chromasiv) has:media -is:retweet"
         paramMap["tweet.fields"] =
             "created_at,attachments"
 
@@ -84,13 +90,6 @@ internal class SearchTweetsAPITest {
             paramMap[key] = URLEncoder.encode(value, "UTF-8").replace("+", "%20")
         }
 
-        val signatureBuilder = SignatureBuilder.Builder()
-            .oauthConsumerKey(System.getProperty("consumerKey"))
-            .oauthConsumerSecret(System.getProperty("consumerSecret"))
-            .accessToken(System.getProperty("accessToken"))
-            .accessTokenSecret(System.getProperty("accessTokenSecret"))
-            .build()
-
         val authorizationHeaderString = buildSignature(
             "GET",
             signatureBuilder,
@@ -98,14 +97,21 @@ internal class SearchTweetsAPITest {
             paramMap
         )
 
-        val tweetObject: List<TweetObject> = searchTweetsAPI.search(paramMap, authorizationHeaderString)
-        tweetObject.forEach {
-            println(defaultJson.encodeToString(it))
+        val tweetObject: List<TweetObject> = searchTweetsAPI.searchTweet(paramMap, authorizationHeaderString)
+        assertTrue(tweetObject.isNotEmpty())
+
+        for (tweet in tweetObject) {
+            val attachments = tweet.attachments
+            assertNotNull(attachments)
+
+            val mediaKeys = attachments.media_keys
+            assertNotNull(mediaKeys)
+            assertTrue(mediaKeys.isNotEmpty())
         }
     }
 
     @Test
-    fun searchTweets_details(): Unit = runBlocking {
+    fun searchTweets_details() = runTest {
         val paramMap = LinkedHashMap<String, String>()
         paramMap["query"] = "kotlin -is:retweet"
         paramMap["tweet.fields"] =
@@ -114,13 +120,6 @@ internal class SearchTweetsAPITest {
             paramMap[key] = URLEncoder.encode(value, "UTF-8").replace("+", "%20")
         }
 
-        val signatureBuilder = SignatureBuilder.Builder()
-            .oauthConsumerKey(System.getProperty("consumerKey"))
-            .oauthConsumerSecret(System.getProperty("consumerSecret"))
-            .accessToken(System.getProperty("accessToken"))
-            .accessTokenSecret(System.getProperty("accessTokenSecret"))
-            .build()
-
         val authorizationHeaderString = buildSignature(
             "GET",
             signatureBuilder,
@@ -128,12 +127,12 @@ internal class SearchTweetsAPITest {
             paramMap
         )
 
-        val tweetObject: List<TweetObject> = searchTweetsAPI.search(paramMap, authorizationHeaderString)
-        print(tweetObject)
+        val tweetObject: List<TweetObject> = searchTweetsAPI.searchTweet(paramMap, authorizationHeaderString)
+        assertTrue(tweetObject.isNotEmpty())
     }
 
     @Test
-    fun searchTweets_geo(): Unit = runBlocking {
+    fun searchTweets_geo() = runTest {
         val paramMap = LinkedHashMap<String, String>()
         paramMap["query"] = "from:chromasiv -is:retweet"
         paramMap["tweet.fields"] =
@@ -142,13 +141,6 @@ internal class SearchTweetsAPITest {
             paramMap[key] = URLEncoder.encode(value, "UTF-8").replace("+", "%20")
         }
 
-        val signatureBuilder = SignatureBuilder.Builder()
-            .oauthConsumerKey(System.getProperty("consumerKey"))
-            .oauthConsumerSecret(System.getProperty("consumerSecret"))
-            .accessToken(System.getProperty("accessToken"))
-            .accessTokenSecret(System.getProperty("accessTokenSecret"))
-            .build()
-
         val authorizationHeaderString = buildSignature(
             "GET",
             signatureBuilder,
@@ -156,12 +148,12 @@ internal class SearchTweetsAPITest {
             paramMap
         )
 
-        val tweetObject: List<TweetObject> = searchTweetsAPI.search(paramMap, authorizationHeaderString)
-        print(tweetObject)
+        val tweetObject: List<TweetObject> = searchTweetsAPI.searchTweet(paramMap, authorizationHeaderString)
+        assertTrue(tweetObject.isNotEmpty())
     }
 
     @Test
-    fun searchTweets_metrics(): Unit = runBlocking {
+    fun searchTweets_metrics() = runTest {
         val paramMap = LinkedHashMap<String, String>()
         //Must be you for restricted information
         paramMap["query"] = "from:chromasiv"
@@ -172,13 +164,6 @@ internal class SearchTweetsAPITest {
             paramMap[key] = URLEncoder.encode(value, "UTF-8").replace("+", "%20")
         }
 
-        val signatureBuilder = SignatureBuilder.Builder()
-            .oauthConsumerKey(System.getProperty("consumerKey"))
-            .oauthConsumerSecret(System.getProperty("consumerSecret"))
-            .accessToken(System.getProperty("accessToken"))
-            .accessTokenSecret(System.getProperty("accessTokenSecret"))
-            .build()
-
         val authorizationHeaderString = buildSignature(
             "GET",
             signatureBuilder,
@@ -186,26 +171,18 @@ internal class SearchTweetsAPITest {
             paramMap
         )
 
-        val tweetObject: List<TweetObject> = searchTweetsAPI.search(paramMap, authorizationHeaderString)
-        print(tweetObject)
+        val tweetObject: List<TweetObject> = searchTweetsAPI.searchTweet(paramMap, authorizationHeaderString)
+        assertTrue(tweetObject.isNotEmpty())
     }
 
     @Test
-    fun searchTweets_reference(): Unit = runBlocking {
+    fun searchTweets_reference() = runTest {
         val paramMap = LinkedHashMap<String, String>()
         paramMap["query"] = "kotlin"
         paramMap["tweet.fields"] = "in_reply_to_user_id,referenced_tweets"
         paramMap.forEach { (key, value) ->
             paramMap[key] = URLEncoder.encode(value, "UTF-8").replace("+", "%20")
         }
-
-        val signatureBuilder = SignatureBuilder.Builder()
-            .oauthConsumerKey(System.getProperty("consumerKey"))
-            .oauthConsumerSecret(System.getProperty("consumerSecret"))
-            .accessToken(System.getProperty("accessToken"))
-            .accessTokenSecret(System.getProperty("accessTokenSecret"))
-            .build()
-
         val authorizationHeaderString = buildSignature(
             "GET",
             signatureBuilder,
@@ -213,26 +190,19 @@ internal class SearchTweetsAPITest {
             paramMap
         )
 
-        val tweetObject: List<TweetObject> = searchTweetsAPI.search(paramMap, authorizationHeaderString)
-        print(tweetObject)
+        val tweetObject: List<TweetObject> = searchTweetsAPI.searchTweet(paramMap, authorizationHeaderString)
+        assertTrue(tweetObject.isNotEmpty())
     }
 
     @Test
-    fun searchTweets_others(): Unit = runBlocking {
+    fun searchTweets_others() = runTest {
         val paramMap = LinkedHashMap<String, String>()
-        paramMap["query"] = "kotlin"
-        paramMap["tweet.fields"] = "reply_settings,source,withheld"
+        paramMap["query"] = "(from:chromasiv)"
+        paramMap["tweet.fields"] = "reply_settings"
         paramMap.forEach { (key, value) ->
             paramMap[key] = URLEncoder.encode(value, "UTF-8").replace("+", "%20")
         }
 
-        val signatureBuilder = SignatureBuilder.Builder()
-            .oauthConsumerKey(System.getProperty("consumerKey"))
-            .oauthConsumerSecret(System.getProperty("consumerSecret"))
-            .accessToken(System.getProperty("accessToken"))
-            .accessTokenSecret(System.getProperty("accessTokenSecret"))
-            .build()
-
         val authorizationHeaderString = buildSignature(
             "GET",
             signatureBuilder,
@@ -240,8 +210,13 @@ internal class SearchTweetsAPITest {
             paramMap
         )
 
-        val tweetObject: List<TweetObject> = searchTweetsAPI.search(paramMap, authorizationHeaderString)
-        print(tweetObject)
+        val tweetObject: List<TweetObject> = searchTweetsAPI.searchTweet(paramMap, authorizationHeaderString)
+        assertTrue(tweetObject.isNotEmpty())
+
+        for (tweet in tweetObject) {
+            val replySetting = tweet.reply_settings
+            assertNotNull(replySetting)
+        }
     }
 
 }
