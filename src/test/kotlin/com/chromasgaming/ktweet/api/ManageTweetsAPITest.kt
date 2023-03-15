@@ -6,7 +6,7 @@ import com.chromasgaming.ktweet.models.ManageTweets
 import com.chromasgaming.ktweet.models.Tweet
 import com.chromasgaming.ktweet.oauth.SignatureBuilder
 import com.chromasgaming.ktweet.oauth.buildSignature
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.ExperimentalSerializationApi
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -42,7 +42,7 @@ internal class ManageTweetsAPITest {
     }
 
     @Test
-    fun createTweet() = runBlocking {
+    fun createTweet() = runTest {
         val tweet = Tweet("Tweet Tweet #Kotlin!")
         post = manageTweets.create(tweet)
 
@@ -50,7 +50,7 @@ internal class ManageTweetsAPITest {
     }
 
     @Test
-    fun createTweetReply() = runBlocking {
+    fun createTweetReply() = runTest {
         val tweet = Tweet("Tweet #Kotlin!", null, Tweet.Reply(null, "1465160399976747012"))
         post = manageTweets.create(tweet)
         deleteTweet(post.data.id!!)
@@ -58,7 +58,7 @@ internal class ManageTweetsAPITest {
 
     /** Obtain a Media ID at https://studio.twitter.com/library [Tweet.Media.media_ids]*/
     @Test
-    fun createMediaTweet(): Unit = runBlocking {
+    fun createMediaTweet(): Unit = runTest {
         val tweet = Tweet("Tweeting with media!", Tweet.Media(listOf("1449722748268425225")))
         post = manageTweets.create(tweet)
 
@@ -70,7 +70,7 @@ internal class ManageTweetsAPITest {
      * Obtain an User ID at https://tweeterid.com [Tweet.Media.tagged_user_ids]
      */
     @Test
-    fun createMediaAndPhotoTagTweet(): Unit = runBlocking {
+    fun createMediaAndPhotoTagTweet(): Unit = runTest {
         val tweet = Tweet(
             "Tweeting with media!",
             Tweet.Media(listOf("1438588245340741640"), listOf("850887380739510275"))
@@ -81,20 +81,20 @@ internal class ManageTweetsAPITest {
     }
 
     @Test
-    fun createDeleteTweet(): Unit = runBlocking {
+    fun createDeleteTweet(): Unit = runTest {
         val tweet = Tweet("Tweeting to delete")
         post = manageTweets.create(tweet)
         deleteTweet(post.data.id!!)
     }
 
-    private fun deleteTweet(id: String) : Unit = runBlocking {
+    private fun deleteTweet(id: String): Unit = runTest {
         val authorizationHeaderDeleteString = buildSignature(
             "DELETE",
             signatureBuilder,
-            "$VERSION/tweets/${post.data.id!!}",
+            "$VERSION/tweets/$id",
             emptyMap()
         )
         manageTweets = TwitterManageTweetsApi(clientConfig, authorizationHeaderDeleteString)
-        post = manageTweets.destroy(post.data.id!!)
+        post = manageTweets.destroy(id)
     }
 }
