@@ -2,9 +2,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
 
-    kotlin("jvm") version "1.7.10"
-    kotlin("plugin.serialization") version "1.7.10"
-    id("org.jetbrains.dokka") version "1.7.10"
+    kotlin("jvm") version "1.8.10"
+    kotlin("plugin.serialization") version "1.8.10"
+    id("org.jetbrains.dokka") version "1.8.10"
     id("maven-publish")
     id("signing")
     id("io.gitlab.arturbosch.detekt") version "1.19.0"
@@ -14,6 +14,7 @@ group = "com.chromasgaming"
 version = "1.3.0"
 
 val ktorVersion: String by project
+val kotlinxCoroutinesVersion: String by project
 
 val dokkaHtml by tasks.getting(org.jetbrains.dokka.gradle.DokkaTask::class)
 
@@ -40,11 +41,11 @@ dependencies {
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
-
     implementation(kotlin("stdlib-jdk8"))
 
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutinesVersion")
 }
 
 java {
