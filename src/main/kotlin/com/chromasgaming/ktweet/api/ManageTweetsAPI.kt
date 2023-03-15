@@ -5,6 +5,7 @@ import com.chromasgaming.ktweet.constants.BASEURL
 import com.chromasgaming.ktweet.constants.VERSION
 import com.chromasgaming.ktweet.models.ManageTweets
 import com.chromasgaming.ktweet.models.Tweet
+import com.chromasgaming.ktweet.util.HttpRequestBuilderWrapper
 import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.RedirectResponseException
@@ -12,7 +13,6 @@ import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.headers
 import io.ktor.client.request.setBody
-import io.ktor.client.request.url
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
@@ -61,14 +61,14 @@ class TwitterManageTweetsApi(
      * @return the response in the object [ManageTweets]
      */
     override suspend fun create(tweet: Tweet): ManageTweets {
-        val builder = createRequestBuilder("$BASEURL/$VERSION/tweets") {
+        val builder = HttpRequestBuilderWrapper("$BASEURL/$VERSION/tweets") {
             method = HttpMethod.Post
             setBody(tweet)
             headers {
                 append(HttpHeaders.ContentType, ContentType.Application.Json)
                 append(HttpHeaders.Authorization, authorizationHeaderString)
             }
-        }
+        }.build()
 
         return execute(builder)
     }
@@ -79,12 +79,12 @@ class TwitterManageTweetsApi(
      * @return the response in the object [ManageTweets]
      */
     override suspend fun destroy(id: String): ManageTweets {
-        val builder = createRequestBuilder("$BASEURL/$VERSION/tweets/$id") {
+        val builder = HttpRequestBuilderWrapper("$BASEURL/$VERSION/tweets/$id") {
             method = HttpMethod.Delete
             headers {
                 append(HttpHeaders.Authorization, authorizationHeaderString)
             }
-        }
+        }.build()
 
         return execute(builder)
     }
@@ -116,16 +116,5 @@ class TwitterManageTweetsApi(
             logger.error("API request failed: ${builder.url.encodedPath}, ${e.message}")
             throw e
         }
-    }
-
-    /**
-     *  Creates an instance of [HttpRequestBuilder] with a specified [url] and applies a [block] of configuration to it.
-     *  @return an instance of [HttpRequestBuilder] with the specified URL and configuration
-     */
-    private fun createRequestBuilder(url: String, block: HttpRequestBuilder.() -> Unit): HttpRequestBuilder {
-        val builder = HttpRequestBuilder()
-        builder.url(url)
-        block(builder)
-        return builder
     }
 }

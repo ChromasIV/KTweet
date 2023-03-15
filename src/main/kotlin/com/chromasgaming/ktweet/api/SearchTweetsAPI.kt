@@ -5,10 +5,9 @@ import com.chromasgaming.ktweet.config.ClientConfig
 import com.chromasgaming.ktweet.constants.BASEURL
 import com.chromasgaming.ktweet.constants.VERSION
 import com.chromasgaming.ktweet.models.TweetObject
+import com.chromasgaming.ktweet.util.HttpRequestBuilderWrapper
 import io.ktor.client.call.body
-import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.headers
-import io.ktor.client.request.url
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
@@ -30,7 +29,7 @@ class SearchTweetsAPI(private val client: ClientConfig) {
     ): List<TweetObject> {
         var listTweetObject: List<TweetObject> = listOf()
 
-        val builder = createRequestBuilder("$BASEURL/$VERSION/tweets/search/recent") {
+        val builder = HttpRequestBuilderWrapper("$BASEURL/$VERSION/tweets/search/recent") {
             method = HttpMethod.Get
             paramMap.forEach { (key, value) ->
                 url.encodedParameters.append(key, value)
@@ -39,7 +38,7 @@ class SearchTweetsAPI(private val client: ClientConfig) {
                 append(HttpHeaders.ContentType, ContentType.Application.Json)
                 append(HttpHeaders.Authorization, authorizationHeaderString)
             }
-        }
+        }.build()
 
         val response = client.execute(builder)
         if (response.status.isSuccess()) {
@@ -52,12 +51,5 @@ class SearchTweetsAPI(private val client: ClientConfig) {
         client.close()
 
         return listTweetObject
-    }
-
-    private fun createRequestBuilder(url: String, block: HttpRequestBuilder.() -> Unit): HttpRequestBuilder {
-        val builder = HttpRequestBuilder()
-        builder.url(url)
-        block(builder)
-        return builder
     }
 }
