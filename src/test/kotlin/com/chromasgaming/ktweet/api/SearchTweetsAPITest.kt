@@ -1,6 +1,5 @@
 package com.chromasgaming.ktweet.api
 
-import com.chromasgaming.ktweet.config.ClientConfig
 import com.chromasgaming.ktweet.models.TweetObject
 import com.chromasgaming.ktweet.oauth.SignatureBuilder
 import com.chromasgaming.ktweet.oauth.buildSignature
@@ -20,8 +19,6 @@ internal class SearchTweetsAPITest {
     private lateinit var searchTweetsAPI: SearchTweetsAPI
     private lateinit var signatureBuilder: SignatureBuilder
 
-    private val clientConfig = ClientConfig()
-
     @BeforeEach
     fun setUp() {
         signatureBuilder = SignatureBuilder.Builder()
@@ -31,7 +28,7 @@ internal class SearchTweetsAPITest {
             .accessTokenSecret(System.getProperty("accessTokenSecret"))
             .build()
 
-        searchTweetsAPI = SearchTweetsAPI(clientConfig)
+        searchTweetsAPI = SearchTweetsAPI()
     }
 
     @Test
@@ -75,7 +72,7 @@ internal class SearchTweetsAPITest {
         )
 
         assertThrows<JsonConvertException>("No data available.") {
-            val tweetObject: List<TweetObject> = searchTweetsAPI.searchTweet(paramMap, authorizationHeaderString)
+            searchTweetsAPI.searchTweet(paramMap, authorizationHeaderString)
         }
     }
 

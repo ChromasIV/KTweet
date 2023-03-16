@@ -1,6 +1,6 @@
 package com.chromasgaming.ktweet.api
 
-import com.chromasgaming.ktweet.config.ClientConfig
+import com.chromasgaming.ktweet.config.MyHttpClient
 import com.chromasgaming.ktweet.models.ManageTweets
 import com.chromasgaming.ktweet.models.Tweet
 import com.chromasgaming.ktweet.util.BASEURL
@@ -12,6 +12,7 @@ import io.ktor.client.plugins.RedirectResponseException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.headers
+import io.ktor.client.request.request
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
@@ -42,18 +43,18 @@ interface ManageTweetsApi {
     suspend fun destroy(id: String): ManageTweets
 }
 
-private val clientConfig = ClientConfig()
-
 /**
  * This class implements the [ManageTweetsApi] interface using the Twitter API.
- * @param clientConfig the [ClientConfig] object to use for HTTP requests
+ * @param client the [MyHttpClient] object to use for HTTP requests
  * @param authorizationHeaderString the authorization header string to use for requests
  */
 @ExperimentalSerializationApi
 class TwitterManageTweetsApi(
-    private val authorizationHeaderString: String
+    private val authorizationHeaderString: String,
+    client: MyHttpClient = MyHttpClient()
 ) : ManageTweetsApi {
 
+    private val httpClient = client.httpClient
     private val logger = KotlinLogging.logger {}
 
     /**
@@ -98,7 +99,7 @@ class TwitterManageTweetsApi(
      */
     private suspend fun execute(builder: HttpRequestBuilder): ManageTweets {
         try {
-            val response = clientConfig.execute(builder)
+            val response = httpClient.request(builder)
             if (response.status.isSuccess()) {
                 val body = response.call.body<ManageTweets>()
                 logger.debug("API request successful: ${builder.url.encodedPath}")

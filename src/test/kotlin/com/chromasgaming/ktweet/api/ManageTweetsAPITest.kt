@@ -1,6 +1,5 @@
 package com.chromasgaming.ktweet.api
 
-import com.chromasgaming.ktweet.config.ClientConfig
 import com.chromasgaming.ktweet.models.ManageTweets
 import com.chromasgaming.ktweet.models.Tweet
 import com.chromasgaming.ktweet.oauth.SignatureBuilder
@@ -18,8 +17,6 @@ internal class ManageTweetsAPITest {
 
     private lateinit var authorizationHeaderString: String
     private lateinit var signatureBuilder: SignatureBuilder
-
-    private val clientConfig = ClientConfig()
 
     @BeforeEach
     fun setUp() {

@@ -1,19 +1,21 @@
 package com.chromasgaming.ktweet.oauth
 
-import com.chromasgaming.ktweet.config.ClientConfig
+import com.chromasgaming.ktweet.config.MyHttpClient
 import com.chromasgaming.ktweet.models.AccessToken
 import com.chromasgaming.ktweet.models.RequestToken
 import com.chromasgaming.ktweet.util.BASEURL
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.request
 import io.ktor.client.request.url
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 
-class TwitterAuthentication {
-
-    private val client = ClientConfig()
+class TwitterAuthentication(
+    client: MyHttpClient = MyHttpClient()
+) {
+    private val httpClient = client.httpClient
 
     suspend fun getRequestToken(consumerKey: String, consumerSecret: String): RequestToken {
         val builder = HttpRequestBuilder()
@@ -24,10 +26,10 @@ class TwitterAuthentication {
         )
         builder.method = HttpMethod.Post
 
-        val response: HttpResponse = client.execute(builder)
+        val response: HttpResponse = httpClient.request(builder)
         val stringBody: String = response.body()
 
-        client.close()
+        httpClient.close()
 
         return RequestToken(
             getTokenValue(stringBody, "oauth_token="),
@@ -50,10 +52,10 @@ class TwitterAuthentication {
         )
         builder.method = HttpMethod.Post
 
-        val response: HttpResponse = client.execute(builder)
+        val response: HttpResponse = httpClient.request(builder)
         val stringBody: String = response.body()
 
-        client.close()
+        httpClient.close()
 
         return AccessToken(
             getTokenValue(stringBody, "oauth_token="),
