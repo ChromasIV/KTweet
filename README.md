@@ -5,7 +5,7 @@ KTweet is a library that allows you to use the Twitter API v2.
 Interested in Kotlin or KTweet? Join the [Discord](https://discord.gg/aSBXXkzb3f)
 
 ## Import
-Check the latest version - [KTweet](https://search.maven.org/artifact/com.chromasgaming/ktweet)
+![KTweet on Maven](https://img.shields.io/maven-central/v/com.chromasgaming/ktweet?label=latest%20version)
 
 ### Maven
 ```
