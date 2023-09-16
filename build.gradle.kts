@@ -1,17 +1,16 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-
-    kotlin("jvm") version "1.8.10"
-    kotlin("plugin.serialization") version "1.8.10"
-    id("org.jetbrains.dokka") version "1.8.10"
+    kotlin("jvm") version "1.9.0"
+    kotlin("plugin.serialization") version "1.9.0"
+    id("org.jetbrains.dokka") version "1.9.0"
     id("maven-publish")
     id("signing")
-    id("io.gitlab.arturbosch.detekt") version "1.19.0"
+    id("io.gitlab.arturbosch.detekt") version "1.23.1"
 }
 
 group = "com.chromasgaming"
-version = "2.0.0-Alpha"
+version = "2.0.0"
 
 val ktorVersion: String by project
 val kotlinxCoroutinesVersion: String by project
@@ -41,7 +40,7 @@ dependencies {
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-    implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
+    implementation("io.github.oshai:kotlin-logging-jvm:5.1.0")
     implementation(kotlin("stdlib-jdk8"))
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
@@ -114,7 +113,7 @@ signing {
 tasks.kotlinSourcesJar() {}
 
 detekt {
-    config = files("config/detekt/detekt-config.yml")
+    config.setFrom("config/detekt/detekt.yml")
 }
 
 tasks.test {
@@ -122,12 +121,14 @@ tasks.test {
     testLogging {
         events("passed", "skipped", "failed")
     }
-    systemProperty("consumerKey", System.getProperty("consumerKey"))
-    systemProperty("consumerSecret", System.getProperty("consumerSecret"))
-    systemProperty("accessToken", System.getProperty("accessToken"))
-    systemProperty("accessTokenSecret", System.getProperty("accessTokenSecret"))
-    systemProperty("clientId", System.getProperty("clientId"))
-    systemProperty("clientSecret", System.getProperty("clientSecret"))
+//    systemProperty("consumerKey", System.getProperty("consumerKey"))
+//    systemProperty("consumerSecret", System.getProperty("consumerSecret"))
+//    systemProperty("accessToken", System.getProperty("accessToken"))
+//    systemProperty("accessTokenSecret", System.getProperty("accessTokenSecret"))
+//    systemProperty("clientId", System.getProperty("clientId"))
+//    systemProperty("clientSecret", System.getProperty("clientSecret"))
+
+    systemProperty("oauth2AccessToken", System.getProperty("oauth2AccessToken"))
 
     onlyIf { !project.hasProperty("skipTests") }
 }

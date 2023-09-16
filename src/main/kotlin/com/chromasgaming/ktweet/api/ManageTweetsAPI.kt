@@ -6,6 +6,7 @@ import com.chromasgaming.ktweet.models.Tweet
 import com.chromasgaming.ktweet.util.BASEURL
 import com.chromasgaming.ktweet.util.HttpRequestBuilderWrapper
 import com.chromasgaming.ktweet.util.VERSION
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.RedirectResponseException
@@ -21,7 +22,6 @@ import io.ktor.http.append
 import io.ktor.http.encodedPath
 import io.ktor.http.isSuccess
 import kotlinx.serialization.ExperimentalSerializationApi
-import mu.KotlinLogging
 
 
 /**
@@ -102,10 +102,10 @@ class TwitterManageTweetsApi(
             val response = httpClient.request(builder)
             if (response.status.isSuccess()) {
                 val body = response.call.body<ManageTweets>()
-                logger.debug("API request successful: ${builder.url.encodedPath}")
+                logger.debug { "API request successful: ${builder.url.encodedPath}" }
                 return body
             } else {
-                logger.warn("API request failed: ${builder.url.encodedPath}, ${response.status}")
+                logger.warn { "API request failed: ${builder.url.encodedPath}, ${response.status}" }
                 val exception = when (response.status.value) {
                     in 300..399 -> RedirectResponseException(response, "")
                     in 400..499 -> ClientRequestException(response, "")
@@ -115,7 +115,7 @@ class TwitterManageTweetsApi(
                 throw exception
             }
         } catch (e: Exception) {
-            logger.error("API request failed: ${builder.url.encodedPath}, ${e.message}")
+            logger.error { "API request failed: ${builder.url.encodedPath}, ${e.message}" }
             throw e
         }
     }

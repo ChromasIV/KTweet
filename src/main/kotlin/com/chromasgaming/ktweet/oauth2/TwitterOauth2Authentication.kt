@@ -4,17 +4,10 @@ import com.chromasgaming.ktweet.config.MyHttpClient
 import com.chromasgaming.ktweet.models.BearerToken
 import com.chromasgaming.ktweet.util.BASEURL
 import com.chromasgaming.ktweet.util.HttpRequestBuilderWrapper
-import io.ktor.client.call.body
-import io.ktor.client.request.forms.submitForm
-import io.ktor.client.request.headers
-import io.ktor.client.request.parameter
-import io.ktor.client.request.request
-import io.ktor.client.statement.HttpResponse
-import io.ktor.http.ContentType
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
-import io.ktor.http.Parameters
-import io.ktor.http.append
+import io.ktor.client.call.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
 import java.util.*
 
 class TwitterOauth2Authentication(
@@ -44,14 +37,13 @@ class TwitterOauth2Authentication(
             append("code_verifier", PKCE)
         }
 
-        val response: HttpResponse = httpClient.submitForm(
-            url = "$BASEURL/2/oauth2/token",
-            formParameters = formParameters
-        ) {
+        val response: HttpResponse = httpClient.post("$BASEURL/2/oauth2/token") {
             headers {
                 append(HttpHeaders.Authorization, "Basic $basicAuth")
                 append(HttpHeaders.ContentType, ContentType.Application.FormUrlEncoded)
             }
+            setBody(formParameters.formUrlEncode())
+
         }
 
         val bearerToken: BearerToken = response.body()

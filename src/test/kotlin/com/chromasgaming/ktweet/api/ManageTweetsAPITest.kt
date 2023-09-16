@@ -2,9 +2,6 @@ package com.chromasgaming.ktweet.api
 
 import com.chromasgaming.ktweet.models.ManageTweets
 import com.chromasgaming.ktweet.models.Tweet
-import com.chromasgaming.ktweet.oauth.SignatureBuilder
-import com.chromasgaming.ktweet.oauth.buildSignature
-import com.chromasgaming.ktweet.util.VERSION
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.ExperimentalSerializationApi
 import org.junit.jupiter.api.BeforeEach
@@ -15,32 +12,14 @@ internal class ManageTweetsAPITest {
     private lateinit var manageTweets: TwitterManageTweetsApi
     private lateinit var post: ManageTweets
 
-    private lateinit var authorizationHeaderString: String
-    private lateinit var signatureBuilder: SignatureBuilder
-
     @BeforeEach
     fun setUp() {
-        signatureBuilder = SignatureBuilder.Builder()
-            .oauthConsumerKey(System.getProperty("consumerKey"))
-            .oauthConsumerSecret(System.getProperty("consumerSecret"))
-            .accessToken(System.getProperty("accessToken"))
-            .accessTokenSecret(System.getProperty("accessTokenSecret"))
-            .build()
-
-        authorizationHeaderString = buildSignature(
-            "POST",
-            signatureBuilder,
-            "$VERSION/tweets",
-            emptyMap()
-        )
-
-        manageTweets = TwitterManageTweetsApi(authorizationHeaderString)
-
+        manageTweets = TwitterManageTweetsApi("Bearer ${System.getProperty("oauth2AccessToken")}")
     }
 
     @Test
     fun createTweet() = runTest {
-        val tweet = Tweet("Tweet Tweet #Kotlin!")
+        val tweet = Tweet("#KTweet Testing on X")
         post = manageTweets.create(tweet)
 
         deleteTweet(post.data.id!!)
@@ -48,7 +27,7 @@ internal class ManageTweetsAPITest {
 
     @Test
     fun createTweetReply() = runTest {
-        val tweet = Tweet("Tweet #Kotlin!", null, Tweet.Reply(null, "1465160399976747012"))
+        val tweet = Tweet("#KTweet Testing on X", null, Tweet.Reply(null, "1702867177559236715"))
         post = manageTweets.create(tweet)
         deleteTweet(post.data.id!!)
     }
@@ -85,13 +64,6 @@ internal class ManageTweetsAPITest {
     }
 
     private fun deleteTweet(id: String): Unit = runTest {
-        val authorizationHeaderDeleteString = buildSignature(
-            "DELETE",
-            signatureBuilder,
-            "$VERSION/tweets/$id",
-            emptyMap()
-        )
-        manageTweets = TwitterManageTweetsApi(authorizationHeaderDeleteString)
         post = manageTweets.destroy(id)
     }
 }
