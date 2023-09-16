@@ -112,9 +112,6 @@ signing {
 
 tasks.kotlinSourcesJar() {}
 
-detekt {
-    config.setFrom("config/detekt/detekt.yml")
-}
 
 tasks.test {
     useJUnitPlatform()
