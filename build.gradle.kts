@@ -118,13 +118,12 @@ tasks.test {
     testLogging {
         events("passed", "skipped", "failed")
     }
-//    systemProperty("consumerKey", System.getProperty("consumerKey"))
-//    systemProperty("consumerSecret", System.getProperty("consumerSecret"))
-//    systemProperty("accessToken", System.getProperty("accessToken"))
-//    systemProperty("accessTokenSecret", System.getProperty("accessTokenSecret"))
-//    systemProperty("clientId", System.getProperty("clientId"))
-//    systemProperty("clientSecret", System.getProperty("clientSecret"))
-
+    systemProperty("consumerKey", System.getProperty("consumerKey"))
+    systemProperty("consumerSecret", System.getProperty("consumerSecret"))
+    systemProperty("accessToken", System.getProperty("accessToken"))
+    systemProperty("accessTokenSecret", System.getProperty("accessTokenSecret"))
+    systemProperty("clientId", System.getProperty("clientId"))
+    systemProperty("clientSecret", System.getProperty("clientSecret"))
     systemProperty("oauth2AccessToken", System.getProperty("oauth2AccessToken"))
 
     onlyIf { !project.hasProperty("skipTests") }
