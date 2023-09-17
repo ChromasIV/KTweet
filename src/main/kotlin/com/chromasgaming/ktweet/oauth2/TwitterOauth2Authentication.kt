@@ -1,32 +1,41 @@
 package com.chromasgaming.ktweet.oauth2
 
-import com.chromasgaming.ktweet.config.ClientConfig
-import com.chromasgaming.ktweet.constants.BASEURL
-import com.chromasgaming.ktweet.models.BearerToken
+import com.chromasgaming.ktweet.config.MyHttpClient
+import com.chromasgaming.ktweet.models.OAuth2
+import com.chromasgaming.ktweet.util.BASEURL
+import com.chromasgaming.ktweet.util.HttpRequestBuilderWrapper
 import io.ktor.client.call.body
-import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.headers
 import io.ktor.client.request.parameter
-import io.ktor.client.request.url
+import io.ktor.client.request.post
+import io.ktor.client.request.request
+import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
+import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
 import io.ktor.http.Parameters
+import io.ktor.http.append
+import io.ktor.http.formUrlEncode
 import java.util.*
 
-class TwitterOauth2Authentication {
+class TwitterOauth2Authentication(
+    client: MyHttpClient = MyHttpClient()
+) {
 
+    private val httpClient = client.httpClient
     /**
      * OAuth 2.0 making request on behalf of users (Confidential)
-     * @return the response in the object [BearerToken]
+     * @return the response in the object [OAuth2]
      */
     suspend fun getBearerToken(
         code: String,
         clientId: String,
         clientSecret: String,
         redirectUri: String,
-        PKCE: String
-    ): BearerToken {
-        val client = ClientConfig()
+        pkce: String
+    ): OAuth2 {
+
         val basicAuth = Base64.getEncoder().encodeToString("$clientId:$clientSecret".toByteArray())
 
         val formParameters = Parameters.build {
@@ -34,39 +43,46 @@ class TwitterOauth2Authentication {
             append("grant_type", "authorization_code")
             append("client_id", clientId)
             append("redirect_uri", redirectUri)
-            append("code_verifier", PKCE)
+            append("code_verifier", pkce)
         }
-        val response: HttpResponse = client.submitForm("$BASEURL/2/oauth2/token", formParameters, basicAuth)
 
-        val bearerToken: BearerToken = response.body()
-        client.close()
+        val response: HttpResponse = httpClient.post("$BASEURL/2/oauth2/token") {
+            headers {
+                append(HttpHeaders.Authorization, "Basic $basicAuth")
+                append(HttpHeaders.ContentType, ContentType.Application.FormUrlEncoded)
+            }
+            setBody(formParameters.formUrlEncode())
 
-        return bearerToken
+        }
+
+        val oAuth2: OAuth2 = response.body()
+        httpClient.close()
+
+        return oAuth2
+
     }
 
     //OAuth 2.0 App-Only
-    suspend fun getAppOnlyBearerToken(apiKey: String, apiSecretKey: String): BearerToken {
-        val client = ClientConfig()
-        val builder = HttpRequestBuilder()
-
+    suspend fun getAppOnlyBearerToken(apiKey: String, apiSecretKey: String): OAuth2 {
         val basic = Base64.getEncoder().encodeToString("$apiKey:$apiSecretKey".toByteArray())
 
-        builder.url("$BASEURL/oauth2/token")
-        builder.parameter("grant_type", "client_credentials")
+        val builder = HttpRequestBuilderWrapper("$BASEURL/oauth2/token") {
+            parameter("grant_type", "client_credentials")
+            headers {
+                append(
+                    HttpHeaders.Authorization,
+                    "Basic $basic"
+                )
+                append(HttpHeaders.ContentType, ContentType.Application.FormUrlEncoded)
+            }
+            method = HttpMethod.Post
+        }.build()
 
-        builder.headers {
-            append(
-                HttpHeaders.Authorization,
-                "Basic $basic"
-            )
-            append(HttpHeaders.ContentType, "application/x-www-form-urlencoded")
-        }
+        val response: HttpResponse = httpClient.request(builder)
+        val oAuth2: OAuth2 = response.body()
+        httpClient.close()
 
-        val response: HttpResponse = client.post(builder)
+        return oAuth2
 
-        val bearerToken: BearerToken = response.body()
-        client.close()
-
-        return bearerToken
     }
 }

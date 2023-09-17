@@ -1,55 +1,57 @@
 package com.chromasgaming.ktweet.api
 
-import com.chromasgaming.ktweet.config.ClientConfig
-import com.chromasgaming.ktweet.constants.BASEURL
-import com.chromasgaming.ktweet.constants.VERSION
+import TwitterSearch
+import com.chromasgaming.ktweet.config.MyHttpClient
 import com.chromasgaming.ktweet.models.TweetObject
-import com.chromasgaming.ktweet.util.defaultJson
+import com.chromasgaming.ktweet.util.BASEURL
+import com.chromasgaming.ktweet.util.HttpRequestBuilderWrapper
+import com.chromasgaming.ktweet.util.VERSION
 import io.ktor.client.call.body
-import io.ktor.client.request.HttpRequestBuilder
-import io.ktor.client.request.url
+import io.ktor.client.request.headers
+import io.ktor.client.request.request
+import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
-import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.jsonObject
+import io.ktor.http.HttpMethod
+import io.ktor.http.append
+import io.ktor.http.isSuccess
+
 
 /**
  * This class handles all API calls that exist under Search Tweets.
  * API Reference [Twitter API](https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference).
  */
-class SearchTweetsAPI {
+class SearchTweetsAPI(client: MyHttpClient = MyHttpClient()) {
+    private val httpClient = client.httpClient
     /**
      *  Search for Tweets published in the last 7 days
      *  @return the response in the object List[TweetObject]
      */
-    suspend fun search(paramMap: LinkedHashMap<String, String>, authorizationHeaderString: String): List<TweetObject> {
+    suspend fun searchTweet(
+        paramMap: LinkedHashMap<String, String>,
+        authorizationHeaderString: String
+    ): List<TweetObject> {
         var listTweetObject: List<TweetObject> = listOf()
-        runBlocking {
-            val client = ClientConfig()
-            val builder = HttpRequestBuilder()
-            builder.url("$BASEURL/$VERSION/tweets/search/recent")
 
+        val builder = HttpRequestBuilderWrapper("$BASEURL/$VERSION/tweets/search/recent") {
+            method = HttpMethod.Get
             paramMap.forEach { (key, value) ->
-                builder.url.parameters.append(key, value)
+                url.encodedParameters.append(key, value)
             }
-
-            builder.headers.append(HttpHeaders.Authorization, authorizationHeaderString)
-            builder.headers.append(HttpHeaders.ContentType, "application/json")
-
-            val response = client.get(builder)
-            val jsonString: JsonElement?
-            val resultCount = defaultJson.decodeFromString<JsonObject>(response.body())["meta"]
-
-            if (resultCount != null) {
-                if (resultCount.jsonObject["result_count"].toString() > "0") {
-                    jsonString = defaultJson.decodeFromString<JsonObject>(response.body())["data"]
-                    listTweetObject = defaultJson.decodeFromString(jsonString.toString())
-                }
+            headers {
+                append(HttpHeaders.ContentType, ContentType.Application.Json)
+                append(HttpHeaders.Authorization, authorizationHeaderString)
             }
-            client.close()
+        }.build()
+
+        val response = httpClient.request(builder)
+        if (response.status.isSuccess()) {
+            val body = response.body<TwitterSearch>()
+
+            if (body.meta.resultCount > 0) {
+                listTweetObject = body.tweets
+            }
         }
+        httpClient.close()
 
         return listTweetObject
     }

@@ -31,9 +31,6 @@ jobs:
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
     - name: Build with Gradle
-      run: gradle test -DconsumerSecret=${{ secrets.CONSUMERSECRET }} -DaccessToken=${{ secrets.ACCESSTOKEN }} -DconsumerKey=${{ secrets.CONSUMERKEY }} -DaccessTokenSecret=${{ secrets.ACCESSTOKENSECRET }}
+      run: gradle test -Doauth2AccessToken=${{ secrets.OAUTH2ACCESSTOKEN }}
       env:
-       consumerKey: ${{ secrets.CONSUMERKEY }}
-       consumerSecret: ${{ secrets.CONSUMERSECRET }}
-       accessToken: ${{ secrets.ACCESSTOKEN }}
-       accessTokenSecret: ${{ secrets.ACCESSTOKENSECRET }}
+       oauth2AccessToken: ${{ secrets.OAUTH2ACCESSTOKEN }}      

@@ -1,6 +1,7 @@
 package com.chromasgaming.ktweet.models
 
 import kotlinx.serialization.Contextual
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 
@@ -10,70 +11,74 @@ import kotlinx.serialization.json.JsonObject
 data class TweetObject(
     val id: String,
     val text: String,
+    @SerialName("edit_history_tweet_ids") val editHistoryTweetIds: List<String>,
     val attachments: Attachments? = null,
-    val author_id: String? = null,
-    val context_annotations: List<JsonObject>? = null,
-    val conversation_id: String? = null,
-    @Contextual val created_at: String? = null,
+    @SerialName("author_id") val authorId: String? = null,
+    @SerialName("context_annotations") val contextAnnotations: List<JsonObject>? = null,
+    @SerialName("conversation_id") val conversationId: String? = null,
+    @SerialName("created_at") @Contextual val createdAt: String? = null,
     val entities: JsonObject? = null,
     val geo: Geo? = null,
-    val in_reply_to_user_id: String? = null,
+    @SerialName("in_reply_to_user_id") val inReplyToUserId: String? = null,
     val lang: String? = null,
-    val non_public_metrics: NonPublicMetrics? = null,
-    val organic_metrics: OrganicMetrics? = null,
-    val possibly_sensitive: Boolean? = null,
-    val promoted_metrics: PromotedMetrics? = null,
-    val public_metrics: PublicMetrics? = null,
-    val referenced_tweets: ArrayList<JsonObject>? = null,
-    val reply_settings: String? = null,
+    @SerialName("non_public_metrics") val nonPublicMetrics: NonPublicMetrics? = null,
+    @SerialName("organic_metrics") val organicMetrics: OrganicMetrics? = null,
+    @SerialName("possibly_sensitive") val possiblySensitive: Boolean? = null,
+    @SerialName("promoted_metrics") val promotedMetrics: PromotedMetrics? = null,
+    @SerialName("public_metrics") val publicMetrics: PublicMetrics? = null,
+    @SerialName("referenced_tweets") val referencedTweets: ArrayList<JsonObject>? = null,
+    @SerialName("reply_settings") val replySettings: String? = null,
     val source: String? = null,
     val withheld: WithHolding? = null
 
 )
 
 @Serializable
-data class Attachments(val poll_ids: ArrayList<String>? = null, val media_keys: ArrayList<String>? = null)
+data class Attachments(
+    @SerialName("poll_ids") val pollIds: ArrayList<String>? = null,
+    @SerialName("media_keys") val mediaKeys: ArrayList<String>? = null
+)
 
 @Serializable
-data class Geo(val coordinates: Coordinates? = null, val place_id: String? = null)
+data class Geo(val coordinates: Coordinates? = null, @SerialName("place_id") val placeId: String? = null)
 
 @Serializable
 data class Coordinates(val type: String? = null, val coordinates: ArrayList<Float>? = null)
 
 @Serializable
 data class NonPublicMetrics(
-    val impression_count: Int? = null,
-    val url_link_clicks: Int? = null,
-    val user_profile_clicks: Int? = null
+    @SerialName("impression_count") val impressionCount: Int? = null,
+    @SerialName("url_link_clicks") val urlLinkClicks: Int? = null,
+    @SerialName("user_profile_clicks") val userProfileClicks: Int? = null
 )
 
 @Serializable
 data class OrganicMetrics(
-    val impression_count: Int? = null,
-    val like_count: Int? = null,
-    val reply_count: Int? = null,
-    val retweet_count: Int? = null,
-    val url_link_clicks: Int? = null,
-    val user_profile_clicks: Int? = null
+    @SerialName("impression_count") val impressionCount: Int? = null,
+    @SerialName("like_count") val likeCount: Int? = null,
+    @SerialName("reply_count") val replyCount: Int? = null,
+    @SerialName("retweet_count") val retweetCount: Int? = null,
+    @SerialName("url_link_clicks") val urlLinkClicks: Int? = null,
+    @SerialName("user_profile_clicks") val userProfileClicks: Int? = null
 )
 
 @Serializable
 data class PromotedMetrics(
-    val impression_count: Int? = null,
-    val like_count: Int? = null,
-    val reply_count: Int? = null,
-    val retweet_count: Int? = null,
-    val url_link_clicks: Int? = null,
-    val user_profile_clicks: Int? = null
+    @SerialName("impression_count")  val impressionCount: Int? = null,
+    @SerialName("like_count")  val likeCount: Int? = null,
+    @SerialName("reply_count")  val replyCount: Int? = null,
+    @SerialName("retweet_count")   val retweetCount: Int? = null,
+    @SerialName("url_link_clicks")   val urlLinkClicks: Int? = null,
+    @SerialName("user_profile_clicks")   val userProfileClicks: Int? = null
 )
 
 @Serializable
 data class PublicMetrics(
-    val retweet_count: Int? = null,
-    val reply_count: Int? = null,
-    val like_count: Int? = null,
-    val quote_count: Int? = null
+    @SerialName("retweet_count")  val retweetCount: Int? = null,
+    @SerialName("reply_count")   val replyCount: Int? = null,
+    @SerialName("like_count")   val likeCount: Int? = null,
+    @SerialName("quote_count")   val quoteCount: Int? = null
 )
 
 @Serializable
-data class WithHolding(val copyright: Boolean? = null, val country_codes: ArrayList<String>? = null)
+data class WithHolding(val copyright: Boolean? = null, @SerialName("country_codes") val countryCodes: ArrayList<String>? = null)

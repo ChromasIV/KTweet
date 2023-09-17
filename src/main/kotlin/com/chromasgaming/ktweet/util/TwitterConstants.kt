@@ -1,13 +1,13 @@
-package com.chromasgaming.ktweet.constants
+package com.chromasgaming.ktweet.util
 
 
 const val BASEURL = "https://api.twitter.com"
 const val VERSION = "2"
 
-const val NINE = 9
-const val TWELVE = 12
-const val THIRTEEN = 13
-const val TWENTY = 20
-const val TWENTYSIX = 26
-
 const val MILLISECONDS = 1000
+
+@Suppress("MagicNumber")
+val REDIRECT_RANGE = 300..399
+
+@Suppress("MagicNumber")
+val CLIENT_ERROR_RANGE = 400..499
