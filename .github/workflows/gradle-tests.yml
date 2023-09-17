@@ -33,7 +33,4 @@ jobs:
     - name: Build with Gradle
       run: gradle test -DconsumerSecret=${{ secrets.CONSUMERSECRET }} -DaccessToken=${{ secrets.ACCESSTOKEN }} -DconsumerKey=${{ secrets.CONSUMERKEY }} -DaccessTokenSecret=${{ secrets.ACCESSTOKENSECRET }}
       env:
-       consumerKey: ${{ secrets.CONSUMERKEY }}
-       consumerSecret: ${{ secrets.CONSUMERSECRET }}
-       accessToken: ${{ secrets.ACCESSTOKEN }}
-       accessTokenSecret: ${{ secrets.ACCESSTOKENSECRET }}
+       oauth2AccessToken: ${{ secrets.OAUTH2ACCESSTOKEN }}      
