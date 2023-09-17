@@ -1,7 +1,7 @@
 package com.chromasgaming.ktweet.api
 
 import com.chromasgaming.ktweet.config.MyHttpClient
-import com.chromasgaming.ktweet.models.BearerToken
+import com.chromasgaming.ktweet.models.OAuth2
 import com.chromasgaming.ktweet.models.TweetCount
 import com.chromasgaming.ktweet.util.BASEURL
 import com.chromasgaming.ktweet.util.HttpRequestBuilderWrapper
@@ -20,13 +20,14 @@ import io.ktor.http.append
  * This class handles all API calls that exist under Tweet Counts.
  * API Reference [Twitter API](https://developer.twitter.com/en/docs/twitter-api/tweets/counts/api-reference).
  */
+@Suppress("all")
 class CountTweetsAPI(client: MyHttpClient = MyHttpClient()) {
     private val httpClient = client.httpClient
     /**
      * Receive a count of Tweets [TweetCount] that match a query in the last 7 days
      * @return the response in the object [TweetCount]
      */
-    suspend fun recent(paramMap: LinkedHashMap<String, String>, bearerToken: BearerToken): TweetCount {
+    suspend fun recent(paramMap: LinkedHashMap<String, String>, OAuth2: OAuth2): TweetCount {
         val response: HttpResponse
 
         val builder = HttpRequestBuilderWrapper("$BASEURL/$VERSION/tweets/counts/recent") {
@@ -36,7 +37,7 @@ class CountTweetsAPI(client: MyHttpClient = MyHttpClient()) {
             }
             headers {
                 append(HttpHeaders.ContentType, ContentType.Application.Json)
-                append(HttpHeaders.Authorization, "Bearer ${bearerToken.access_token}")
+                append(HttpHeaders.Authorization, "Bearer ${OAuth2.accessToken}")
             }
         }.build()
 

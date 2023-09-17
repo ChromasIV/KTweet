@@ -4,7 +4,9 @@ import com.chromasgaming.ktweet.config.MyHttpClient
 import com.chromasgaming.ktweet.models.ManageTweets
 import com.chromasgaming.ktweet.models.Tweet
 import com.chromasgaming.ktweet.util.BASEURL
+import com.chromasgaming.ktweet.util.CLIENT_ERROR_RANGE
 import com.chromasgaming.ktweet.util.HttpRequestBuilderWrapper
+import com.chromasgaming.ktweet.util.REDIRECT_RANGE
 import com.chromasgaming.ktweet.util.VERSION
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.client.call.body
@@ -97,6 +99,7 @@ class TwitterManageTweetsApi(
      * @return the response in the object [ManageTweets]
      * @throws RedirectResponseException, ClientRequestException, or ServerResponseException if the HTTP request fails
      */
+    @Suppress("TooGenericExceptionCaught")
     private suspend fun execute(builder: HttpRequestBuilder): ManageTweets {
         try {
             val response = httpClient.request(builder)
@@ -107,8 +110,8 @@ class TwitterManageTweetsApi(
             } else {
                 logger.warn { "API request failed: ${builder.url.encodedPath}, ${response.status}" }
                 val exception = when (response.status.value) {
-                    in 300..399 -> RedirectResponseException(response, "")
-                    in 400..499 -> ClientRequestException(response, "")
+                    in REDIRECT_RANGE -> RedirectResponseException(response, "")
+                    in CLIENT_ERROR_RANGE -> ClientRequestException(response, "")
                     else -> ServerResponseException(response, "")
                 }
 

@@ -1,5 +1,6 @@
 package com.chromasgaming.ktweet.models
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -12,8 +13,8 @@ data class ManageTweets(val data: Data) {
 data class Tweet(val text: String, val media: Media? = null, val reply: Reply? = null) {
 
     @Serializable
-    data class Media(val media_ids: List<String>? = null, val tagged_user_ids: List<String>? = null)
+    data class Media(@SerialName("media_ids") val mediaIds: List<String>? = null, @SerialName("tagged_user_ids") val taggedUserIds: List<String>? = null)
 
     @Serializable
-    data class Reply(val exclude_reply_user_ids: List<String>? = null, val in_reply_to_tweet_id: String? = null)
+    data class Reply(@SerialName("exclude_reply_user_ids") val excludeReplyUserIds: List<String>? = null, @SerialName("in_reply_to_tweet_id") val inReplyToTweetId: String? = null)
 }

@@ -32,7 +32,7 @@ internal class ManageTweetsAPITest {
         deleteTweet(post.data.id!!)
     }
 
-    /** Obtain a Media ID at https://studio.twitter.com/library [Tweet.Media.media_ids]*/
+    /** Obtain a Media ID at https://studio.twitter.com/library [Tweet.Media.mediaIds]*/
     @Test
     fun createMediaTweet(): Unit = runTest {
         val tweet = Tweet("Tweeting with media!", Tweet.Media(listOf("1449722748268425225")))
@@ -42,8 +42,8 @@ internal class ManageTweetsAPITest {
     }
 
     /**
-     * Obtain a Media ID at https://studio.twitter.com/library [Tweet.Media.media_ids]
-     * Obtain an User ID at https://tweeterid.com [Tweet.Media.tagged_user_ids]
+     * Obtain a Media ID at https://studio.twitter.com/library [Tweet.Media.mediaIds]
+     * Obtain an User ID at https://tweeterid.com [Tweet.Media.taggedUserIds]
      */
     @Test
     fun createMediaAndPhotoTagTweet(): Unit = runTest {
