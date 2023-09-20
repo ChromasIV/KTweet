@@ -1,27 +1,9 @@
-[![Gradle Build](https://github.com/ChromasIV/KTweet/actions/workflows/gradle-build.yml/badge.svg?branch=master)](https://github.com/ChromasIV/KTweet/actions/workflows/gradle-build.yml) [![Gradle Tests](https://github.com/ChromasIV/KTweet/actions/workflows/gradle-tests.yml/badge.svg?branch=master)](https://github.com/ChromasIV/KTweet/actions/workflows/gradle-tests.yml)
+[![Gradle Build](https://github.com/ChromasIV/KTweet/actions/workflows/gradle-build.yml/badge.svg?branch=master)](https://github.com/ChromasIV/KTweet/actions/workflows/gradle-build.yml) [![Gradle Tests](https://github.com/ChromasIV/KTweet/actions/workflows/gradle-tests.yml/badge.svg?branch=master)](https://github.com/ChromasIV/KTweet/actions/workflows/gradle-tests.yml) [![KTweet on Maven](https://img.shields.io/maven-metadata/v.svg?label=latest%20version&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fcom%2Fchromasgaming%2Fktweet%2Fmaven-metadata.xml)](https://central.sonatype.com/artifact/com.chromasgaming/ktweet)
 # KTweet - A Kotlin X/Twitter Library
 KTweet is a library that allows you to use the X/Twitter API v2 using OAuth2.0.
 
 Interested in Kotlin or KTweet? 
 Join the [Discord](https://discord.gg/aSBXXkzb3f)
-
-## Import
-[![KTweet on Maven](https://img.shields.io/maven-central/v/com.chromasgaming/ktweet?label=latest%20version)](https://central.sonatype.com/search?namespace=com.chromasgaming&q=g%253Acom.chromasgaming%2520a%253Aktweet)
-
-### Maven
-```
-<dependency>
-  <groupId>com.chromasgaming</groupId>
-  <artifactId>ktweet</artifactId>
-  <version>1.3.0</version>
-</dependency>
-```
-
-### Gradle Kotlin DSL
-
-```
-implementation("com.chromasgaming:ktweet:1.3.0")
-```
 
 ## Setup
 1. Obtain the API keys from your X/Twitter Developer portal. Follow this [guide](https://developer.twitter.com/en/docs/twitter-api/getting-started/getting-access-to-the-twitter-api).
@@ -32,7 +14,7 @@ implementation("com.chromasgaming:ktweet:1.3.0")
 All contribution to the library is welcomed.
 Ensure any request follows the following:
 
- - [Contributing](https://github.com/ChromasIV/KTweet/blob/ChromasIV-contributing-draft-1/CONTRIBUTING.md)
+ - [Contributing](https://github.com/ChromasIV/KTweet/blob/master/CONTRIBUTING.md)
  - [Feature Request](https://github.com/ChromasIV/KTweet/blob/master/.github/ISSUE_TEMPLATE/feature_request.md)
  - [Bug Report](https://github.com/ChromasIV/KTweet/blob/master/.github/ISSUE_TEMPLATE/bug_report.md)
 
