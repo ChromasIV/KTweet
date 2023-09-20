@@ -21,7 +21,8 @@
 //
 //        runBlocking {
 //            println(
-//                TwitterOauth2Authentication().getBearerToken("", System.getProperty("clientId"), System.getProperty("clientSecret"), "http://127.0.0.1:8080/callback", "challenge")
+//                //TwitterOauth2Authentication().getBearerToken("", System.getProperty("clientId"), System.getProperty("clientSecret"), "http://127.0.0.1:8080/callback", "challenge")
+//                //TwitterOauth2Authentication().useRefreshToken(System.getProperty("clientId"),System.getProperty("clientSecret"), "")
 //            )
 //        }
 //    }

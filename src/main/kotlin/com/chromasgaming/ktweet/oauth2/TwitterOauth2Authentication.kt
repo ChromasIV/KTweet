@@ -62,6 +62,35 @@ class TwitterOauth2Authentication(
 
     }
 
+    suspend fun useRefreshToken(
+        clientId: String,
+        clientSecret: String,
+        refreshToken: String
+    ): OAuth2 {
+
+        val basicAuth = Base64.getEncoder().encodeToString("$clientId:$clientSecret".toByteArray())
+
+        val formParameters = Parameters.build {
+            append("grant_type", "refresh_token")
+            append("refresh_token", refreshToken)
+        }
+
+        val response: HttpResponse = httpClient.post("$BASEURL/2/oauth2/token") {
+            headers {
+                append(HttpHeaders.Authorization, "Basic $basicAuth")
+                append(HttpHeaders.ContentType, ContentType.Application.FormUrlEncoded)
+            }
+            setBody(formParameters.formUrlEncode())
+
+        }
+
+        val oAuth2: OAuth2 = response.body()
+        httpClient.close()
+
+        return oAuth2
+
+    }
+
     //OAuth 2.0 App-Only
     suspend fun getAppOnlyBearerToken(apiKey: String, apiSecretKey: String): OAuth2 {
         val basic = Base64.getEncoder().encodeToString("$apiKey:$apiSecretKey".toByteArray())
